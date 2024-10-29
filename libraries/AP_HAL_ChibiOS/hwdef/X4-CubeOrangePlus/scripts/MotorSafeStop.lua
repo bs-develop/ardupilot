@@ -1,24 +1,26 @@
--- Safety function to stop all motors if they are no able to pick up neccessary RPM (aka blocked)
--- by EOSBandi 2024
--- Version 1.0
+--[[
+   Motor Safety Monitor Script
+   Automatically stops motors if they fail to achieve necessary RPM
+   Version 1.1
+--]]
 
-local SCRIPT_NAME     = 'MotorSafeStop.lua'
+-- Script Configuration
+local SCRIPT_NAME = 'MotorSafeStop'
 local RUN_INTERVAL_MS = 250
+local PARAM_TABLE_KEY = 61
+local PARAM_TABLE_PREFIX = "MSAFE_"
 
---Settings : Enter motor functions here in the order as motors are configured 
-local motor_functions = {33, 34, 35, 36}
--- Enter ESCx_RPM sensor numberd here in the order as motors are configured
-local rpm_sensors     = {1,2,3,4}
+-- Severity levels for better message categorization
+local MAV_SEVERITY = {EMERGENCY=0, ALERT=1, CRITICAL=2, ERROR=3, WARNING=4, NOTICE=5, INFO=6, DEBUG=7}
+
+--Settings : Motor configuration
+local motor_functions = {33, 34, 35, 36}  -- Motor function numbers
+local rpm_sensors = {1, 2, 3, 4}          -- ESC RPM sensor numbers
+
+assert(#motor_functions == #rpm_sensors, "Motor functions and RPM sensors must match in count")
 
 
-
--- the table key must be used by only one script on a particular flight
--- controller. If you want to re-use it then you need to wipe your old parameters
--- the key must be a number between 0 and 200. The key is persistent in storage
-local PARAM_TABLE_KEY = 75
-local PARAM_TABLE_PREFIX = "KILL_"
-
--- bind a parameter to a variable given
+-- Parameter binding helpers
 local function bind_param(name)
     local p = Parameter()
     assert(p:init(name), string.format('could not find %s parameter', name))
@@ -31,67 +33,162 @@ local function bind_add_param(name, idx, default_value)
     return bind_param(PARAM_TABLE_PREFIX .. name)
 end
 
--- format GCS output
+-- Message formatting with severity
 local function gcs_msg(severity, txt)
     gcs:send_text(severity, string.format('%s: %s', SCRIPT_NAME, txt))
 end
 
+-- Read parameters
+local ESC_HW_ENABLE = bind_param("ESC_HW_ENABLE")
 
 -- setup script specific parameters
-assert(param:add_table(PARAM_TABLE_KEY, PARAM_TABLE_PREFIX, 3), 'could not add param table')
+assert(param:add_table(PARAM_TABLE_KEY, PARAM_TABLE_PREFIX, 4), 'could not add param table')
 
--- Delay after arm to check for RPM, this is the motor spinup time,  , when armed but motors are 
--- not spinning yet (in milliseconds)
-PARAM_ARM_DELAY = bind_add_param("ARM_DELAY", 1, 2000)
--- mimum rpm, is the rpm is below this number we assume that the motor is blocked and disarm the vehicle
-PARAM_MIN_RPM = bind_add_param("MIN_RPM", 2, 100)
--- minimum PWM where the motor should rotate
-PARAM_MIN_PWM = bind_add_param("MIN_PWM", 3, 1080)
+--[[
+  // @Param: ENABLE
+  // @DisplayName: Motor Safety Monitor Enable
+  // @Description: Enable motor safety monitoring
+  // @Values: 0:Disabled,1:Enabled
+  // @User: Standard
+--]]
 
--- Local variables for the script, do not change!
-local script_disabled = false
-local arming_time = 0
+PARAM_ENABLE = bind_add_param("ENABLE", 1, 0)
 
-function update()
+--[[
+  // @Param: ARM_DELAY
+  // @DisplayName: Arm Delay
+  // @Description: Delay after arming before RPM checking starts, preventing immediately 
+      disarming the vehicle, when armed but motors are not spinning yet (ms)
+  // @Range: 1000 5000
+  // @User: Standard
+--]]
+PARAM_ARM_DELAY = bind_add_param("ARM_DELAY", 2, 5000)
 
- -- if we we are disarmed and script is disabled then enable script 
-if (not arming:is_armed()) then
-    script_disabled = false
-    arming_time = 0
-    return update, 250
+--[[
+  // @Param: MIN_RPM
+  // @DisplayName: Minimum RPM
+  // @Description: Minimum RPM threshold for detecting blocked motor
+  // @Range: 100 2000
+  // @User: Standard
+--]]
+PARAM_MIN_RPM = bind_add_param("MIN_RPM", 3, 100)
+
+--[[
+  // @Param: MIN_PWM
+  // @DisplayName: Minimum PWM
+  // @Description: Minimum PWM threshold for RPM checking
+  // @Range: 1000 2000
+  // @User: Standard
+--]]
+PARAM_MIN_PWM = bind_add_param("MIN_PWM", 4, 1080)
+
+-- State tracking
+local state = {
+    script_disabled = false,
+    arming_time = 0,
+    last_check_time = 0,
+    motor_status = {} 
+}
+-- Initialize motor status tracking
+for i = 1, #motor_functions do
+    state.motor_status[i] = {
+        last_rpm = 0,
+        fault_count = 0,
+        last_pwm = 0
+    }
 end
 
--- if we armed and likely flying and the script is enabled then disable the script 
- if arming:is_armed() and vehicle:get_likely_flying() and (not script_disabled) then
-    script_disabled = true
-    -- gcs:send_text(0, "Disable script")
-    return update, 250
+
+-- Logger setup for debugging and analysis
+local function log_motor_data(motor_idx, pwm, rpm, status)
+    logger.write('MSAFE', 'TimeUS,Instance,PWM,RPM,Status',
+                 'QHHHB', 'F----', 'QBBBB',
+                 micros():tofloat(), motor_idx, pwm, rpm, status)
 end
 
- -- At arm start timer for spinup
-if (arming:is_armed() and (not script_disabled)) and arming_time == 0 then
-    arming_time = millis()
-    -- gcs:send_text(0, "Wait for spinup")
-    return update, 250
-end
--- if we are armed and script is enabled then check for motor RPM
-if arming:is_armed() and (not script_disabled) and (arming_time + PARAM_ARM_DELAY:get() < millis()) then
-    -- gcs:send_text(0, "Checking motors")
-    for i = 1, #motor_functions do
-        local motor_pwm = SRV_Channels:get_output_pwm(motor_functions[i])
-        -- gcs:send_text(0, "Motor "..i.." PWM: "..motor_pwm)
-        if motor_pwm > PARAM_MIN_PWM:get() then
-            local motor_rpm = esc_telem:get_rpm(rpm_sensors[i])
-            -- gcs:send_text(0, "Motor "..i.." RPM: ".. motor_rpm)
-            if motor_rpm < PARAM_MIN_RPM:get() then
-                arming:disarm()
-                gcs_msg(0,"Motor "..i.." lock, disarming.")
-            end
+-- Motor check function
+local function check_motor(motor_idx)
+    local motor_pwm = SRV_Channels:get_output_pwm(motor_functions[motor_idx])
+    state.motor_status[motor_idx].last_pwm = motor_pwm
+    
+    if motor_pwm > PARAM_MIN_PWM:get() then
+        local motor_rpm = esc_telem:get_rpm(rpm_sensors[motor_idx])
+        state.motor_status[motor_idx].last_rpm = motor_rpm
+        
+        -- Log motor data
+        log_motor_data(motor_idx, motor_pwm, motor_rpm, 0)
+        
+        if motor_rpm < PARAM_MIN_RPM:get() then
+            state.motor_status[motor_idx].fault_count = state.motor_status[motor_idx].fault_count + 1
+            gcs_msg(MAV_SEVERITY.CRITICAL, string.format("Motor %d low RPM: PWM=%d RPM=%d", 
+                   motor_idx, motor_pwm, motor_rpm))
+            return false
         end
     end
+    return true
 end
 
-return update, RUN_INTERVAL_MS
+function update()
+    -- First check if HobbyWing ESC telemetry is enabled
+    if ESC_HW_ENABLE:get() ~= 1 then
+        if not state.script_disabled then
+            state.script_disabled = true
+            gcs_msg(MAV_SEVERITY.ERROR, "Requires ESC_HW_ENABLE=1")
+        end
+        return update, RUN_INTERVAL_MS
+    end
+
+    if PARAM_ENABLE:get() ~= 1 then
+        if not state.script_disabled then
+            state.script_disabled = true
+            gcs_msg(MAV_SEVERITY.INFO, "Monitoring disabled")
+        end
+        return update, RUN_INTERVAL_MS
+    end
+
+    -- Reset on disarm
+    if not arming:is_armed() then
+        state.script_disabled = false
+        state.arming_time = 0
+        for _, status in pairs(state.motor_status) do
+            status.fault_count = 0
+        end
+        return update, RUN_INTERVAL_MS
+    end
+
+    -- Disable if likely flying
+    if arming:is_armed() and vehicle:get_likely_flying() and not state.script_disabled then
+        state.script_disabled = true
+        gcs_msg(MAV_SEVERITY.INFO, "Monitoring disabled - Vehicle flying")
+        return update, RUN_INTERVAL_MS
+    end
+
+    -- Start timer on arm
+    if arming:is_armed() and not state.script_disabled and state.arming_time == 0 then
+        state.arming_time = millis()
+        gcs_msg(MAV_SEVERITY.INFO, "Waiting for motor spinup")
+        return update, RUN_INTERVAL_MS
+    end
+
+    -- Check motors after delay
+    if arming:is_armed() and not state.script_disabled and 
+       (state.arming_time + PARAM_ARM_DELAY:get() < millis()) then
+        
+        local all_motors_ok = true
+        for i = 1, #motor_functions do
+            if not check_motor(i) then
+                all_motors_ok = false
+            end
+        end
+
+        if not all_motors_ok then
+            arming:disarm()
+            gcs_msg(MAV_SEVERITY.EMERGENCY, "Motor fault detected - disarming")
+        end
+    end
+
+    return update, RUN_INTERVAL_MS
 end
-gcs_msg(6, "Initialized.")
+
+gcs_msg(MAV_SEVERITY.INFO, "Initialized.")
 return update()
