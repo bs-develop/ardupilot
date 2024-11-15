@@ -5,6 +5,7 @@ define AP_CUSTOM_FIRMWARE_STRING "BSX8_copter_4.5.7"
 
 # define droneID
 define AP_OPENDRONEID_ENABLED 1
+define AP_TEMPERATURE_SENSOR_ENABLED 1
 
 
 # MCU class and specific type
