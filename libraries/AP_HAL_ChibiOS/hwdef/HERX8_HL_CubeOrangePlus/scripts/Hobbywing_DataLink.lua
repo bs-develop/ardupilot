@@ -53,13 +53,13 @@ ESC_HW_POLES = bind_add_param("POLES", 2, 14)
 ESC_HW_OFS = bind_add_param("OFS", 3, 0)
 
 if ESC_HW_ENABLE:get() ~= 1 then
-   gcs:send_text(MAV_SEVERITY.INFO, "ESC_HW: disabled")
+   gcs:send_text(MAV_SEVERITY.INFO, "ESC_HW: Disabled.")
    return
 end
 
 local uart = serial:find_serial(0) -- first scripting serial
 if not uart then
-   gcs:send_text(MAV_SEVERITY.ERROR, "ESC_HW: unable to find serial port")
+   gcs:send_text(MAV_SEVERITY.ERROR, "ESC_HW: unable to find serial port.")
    return
 end
 uart:begin(115200)
@@ -225,6 +225,6 @@ local function update()
    return update, 10
 end
 
-gcs:send_text(MAV_SEVERITY.ALERT, "ESC_HW: loaded")
+gcs:send_text(MAV_SEVERITY.ALERT, "ESC_HW: loaded.")
 
 return update, 100

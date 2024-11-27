@@ -19,8 +19,7 @@ local rpm_sensors = {1, 2, 3, 4}          -- ESC RPM sensor numbers
 
 assert(#motor_functions == #rpm_sensors, "Motor functions and RPM sensors must match in count")
 
-
--- Parameter binding helpers
+-- bind a parameter to a variable given
 local function bind_param(name)
     local p = Parameter()
     assert(p:init(name), string.format('could not find %s parameter', name))
@@ -33,13 +32,12 @@ local function bind_add_param(name, idx, default_value)
     return bind_param(PARAM_TABLE_PREFIX .. name)
 end
 
+
 -- Message formatting with severity
 local function gcs_msg(severity, txt)
     gcs:send_text(severity, string.format('%s: %s', SCRIPT_NAME, txt))
 end
 
--- Read parameters
-local ESC_HW_ENABLE = bind_param("ESC_HW_ENABLE")
 
 -- setup script specific parameters
 assert(param:add_table(PARAM_TABLE_KEY, PARAM_TABLE_PREFIX, 4), 'could not add param table')
@@ -51,7 +49,6 @@ assert(param:add_table(PARAM_TABLE_KEY, PARAM_TABLE_PREFIX, 4), 'could not add p
   // @Values: 0:Disabled,1:Enabled
   // @User: Standard
 --]]
-
 PARAM_ENABLE = bind_add_param("ENABLE", 1, 0)
 
 --[[
@@ -82,6 +79,10 @@ PARAM_MIN_RPM = bind_add_param("MIN_RPM", 3, 100)
 --]]
 PARAM_MIN_PWM = bind_add_param("MIN_PWM", 4, 1080)
 
+-- Read parameters
+local ESC_HW_ENABLE = bind_param("ESC_HW_ENABLE")
+
+
 -- State tracking
 local state = {
     script_disabled = false,
@@ -89,6 +90,7 @@ local state = {
     last_check_time = 0,
     motor_status = {} 
 }
+
 -- Initialize motor status tracking
 for i = 1, #motor_functions do
     state.motor_status[i] = {
@@ -97,7 +99,6 @@ for i = 1, #motor_functions do
         last_pwm = 0
     }
 end
-
 
 -- Logger setup for debugging and analysis
 local function log_motor_data(motor_idx, pwm, rpm, status)
@@ -128,23 +129,24 @@ local function check_motor(motor_idx)
     return true
 end
 
-function update()
-    -- First check if HobbyWing ESC telemetry is enabled
-    if ESC_HW_ENABLE:get() ~= 1 then
-        if not state.script_disabled then
-            state.script_disabled = true
-            gcs_msg(MAV_SEVERITY.ERROR, "Requires ESC_HW_ENABLE=1")
-        end
-        return update, RUN_INTERVAL_MS
+if PARAM_ENABLE:get() ~= 1 then
+    if not state.script_disabled then
+        state.script_disabled = true
+        gcs_msg(MAV_SEVERITY.INFO, "Disabled.")
     end
+    return
+end
+if ESC_HW_ENABLE:get() ~= 1 then
+    if not state.script_disabled then
+        state.script_disabled = true
+        gcs_msg(MAV_SEVERITY.ERROR, "Requires ESC_HW_ENABLE=1, Disabled.")
+    end
+    return
+end
 
-    if PARAM_ENABLE:get() ~= 1 then
-        if not state.script_disabled then
-            state.script_disabled = true
-            gcs_msg(MAV_SEVERITY.INFO, "Monitoring disabled")
-        end
-        return update, RUN_INTERVAL_MS
-    end
+function update()
+
+
 
     -- Reset on disarm
     if not arming:is_armed() then
@@ -159,14 +161,14 @@ function update()
     -- Disable if likely flying
     if arming:is_armed() and vehicle:get_likely_flying() and not state.script_disabled then
         state.script_disabled = true
-        gcs_msg(MAV_SEVERITY.INFO, "Monitoring disabled - Vehicle flying")
+        gcs_msg(MAV_SEVERITY.INFO, "Monitoring disabled - Vehicle flying.")
         return update, RUN_INTERVAL_MS
     end
 
     -- Start timer on arm
     if arming:is_armed() and not state.script_disabled and state.arming_time == 0 then
         state.arming_time = millis()
-        gcs_msg(MAV_SEVERITY.INFO, "Waiting for motor spinup")
+        gcs_msg(MAV_SEVERITY.INFO, "Waiting for motor spinup.")
         return update, RUN_INTERVAL_MS
     end
 
@@ -183,7 +185,7 @@ function update()
 
         if not all_motors_ok then
             arming:disarm()
-            gcs_msg(MAV_SEVERITY.EMERGENCY, "Motor fault detected - disarming")
+            gcs_msg(MAV_SEVERITY.EMERGENCY, "Motor fault detected - disarming.")
         end
     end
 
