@@ -7,7 +7,6 @@ ANGLE_MAX 3000         # Maximum lean angle in all flight modes [centidegrees]
 LAND_SPEED_HIGH 150    # The descent speed for the first stage of landing [cm/s]
 ARMING_CHECK 982526    # BitMask for arming check
 
-
 #---SYSTEM
 BRD_HEAT_LOWMGN 10     # Board temperature safety margin [°C] 
 BRD_HEAT_P 50          # Board heater controller P gain
@@ -109,6 +108,8 @@ MOT_SPIN_MIN 0.09      # Throttle level (0 to 1) at which motors start generatin
 GPS_AUTO_CONFIG 2      # Enable automatic configuration for GPS (DroneCAN GPS)
 CAN_P1_DRIVER 1        # Index of virtual driver to be used with physical CAN interface
 CAN_D1_PROTOCOL 1      # Protocol for CAN driver 1 (DroneCAN)
+CAN_P2_DRIVER 1        # (Here 3)
+CAN_D2_PROTOCOL 1      # (Here 3)
 GPS_TYPE 9             # 1st GPS type (DroneCAN)
 GPS_TYPE2 9            # 2nd GPS type (DroneCAN)
 GPS_AUTO_SWITCH 1      # Automatic Switchover (UseBest)
@@ -169,9 +170,7 @@ TERRAIN_ENABLE 0       # Enables the vehicle storing a database of terrain data 
 NTF_BUZZ_PIN 0         # Buzzer Pin Arbitrary pin
 NTF_LED_TYPES 39       # Types of LEDs will be enabled (Built-in LED,Internal ToshibaLED,External ToshibaLED,DroneCAN)
 
-#---IOPORT
-CAN_P2_DRIVER 2        # Index of virtual driver to be used with physical CAN interface
-CAN_D2_PROTOCOL 1      # Protocol for CAN driver 2 (DroneCAN)
+
 #-----3
 SERIAL3_BAUD 115
 SERIAL3_OPTIONS 0

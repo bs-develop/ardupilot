@@ -7,7 +7,6 @@ ANGLE_MAX 3000         # Maximum lean angle in all flight modes [centidegrees]
 LAND_SPEED_HIGH 150    # The descent speed for the first stage of landing [cm/s]
 ARMING_CHECK 982526    # BitMask for arming check
 
-
 #---SYSTEM
 BRD_HEAT_LOWMGN 10     # Board temperature safety margin [°C] 
 BRD_HEAT_P 50          # Board heater controller P gain
@@ -38,6 +37,8 @@ TUNE_MIN 0             # Minimum tuning value
 #---NAVIGATION IMU
 EK3_IMU_MASK 7         # Bitmask for IMU sensors used by EKF3 (Enabling all three IMUs)
 EK3_SRC1_POSZ 3        # Primary source for height estimation (GPS)
+EK3_SRC1_YAW 2         # GPS source
+EK3_SRC2_YAW 1         # Compass source
 EK3_AFFINITY 6         # EKF core affinity for different sensors (Barometer and compass)
 INS_GYRO_FILTER 20     # Gyro filter cutoff frequency [Hz]
 INS_ACCEL_FILTER 10    # Accel filter cutoff frequency [Hz]
