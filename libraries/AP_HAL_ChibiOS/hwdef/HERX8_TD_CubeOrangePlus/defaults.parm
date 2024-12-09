@@ -208,6 +208,7 @@ SERIAL4_PROTOCOL 2     # Mavlink2 Protocol
 
 #---MJOLNIR
 RELAY1_PIN 55          # AUXOUT6
+SERVO14_FUNCTION -1    # GPIO
 RELAY1_FUNCTION 4      # CAMERA
 
 #---ATC Automatic Throttle Control
