@@ -1,11 +1,11 @@
 #---BASICS
-FRAME_CLASS 1          # Quad configuration
+FRAME_CLASS 4          # OctaQuad configuration
 FRAME_TYPE 1           # X configuration
 AHRS_ORIENTATION 0     # Board orientation (Level orientation)
 INITIAL_MODE 5         # Initial flight mode at startup (LOITER)
 ANGLE_MAX 3000         # Maximum lean angle in all flight modes [centidegrees]
 LAND_SPEED_HIGH 150    # The descent speed for the first stage of landing [cm/s]
-ARMING_CHECK 982526    # BitMask for arming check (Not Check Camer)
+ARMING_CHECK 982526    # BitMask for arming check
 
 #---SYSTEM
 BRD_HEAT_LOWMGN 10     # Board temperature safety margin [°C] 
@@ -13,18 +13,18 @@ BRD_HEAT_P 50          # Board heater controller P gain
 BRD_HEAT_TARG 60       # Target board temperature [°C] 
 BRD_VBUS_MIN 4.3       # Minimum voltage on the autopilot power rail to arm [V]
 BRD_SAFETY_DEFLT 0     # Default state of safety switch at boot (Disabled)
-LOG_BITMASK 180222     # Enable differents features to be saved in the log
+LOG_BITMASK 180223     # Enable differents features to be saved in the log
 
 #---TAKE OFF
 PILOT_TKOFF_ALT 100    # Default pilot takeoff altitude [cm]
-GUID_TIMEOUT 3         # Time for guided commands to wait before timing out [s]
+GUID_TIMEOUT 10        # Time for guided commands to wait before timing out [s]
 
 #---RETURN TO LAUNCH
 RTL_ALT 1500           # Target altitude during RTL [cm]
 RTL_ALT_FINAL 0        # Final landing altitude in RTL [cm]
 RTL_ALT_TYPE 0         # RTL altitude type (Relative to home)
 RTL_CLIMB_MIN 0        # Minimum climb height before moving to RTL location [cm]
-RTL_SPEED 1000         # Horizontal speed during RTL [cm/s]
+RTL_SPEED 800          # Horizontal speed during RTL [cm/s]
 RTL_CONE_SLOPE 3       # Controls how steeply the drone climbs during RTL (Steep cone)
 RTL_LOIT_TIME 5000     # Loiter time before landing in RTL [ms]
 RTL_OPTIONS 0          # RTL behavior options
@@ -44,7 +44,7 @@ INS_GYRO_FILTER 20     # Gyro filter cutoff frequency [Hz]
 INS_ACCEL_FILTER 10    # Accel filter cutoff frequency [Hz]
 WP_NAVALT_MIN 0.5      # Minimum navigation altitude [m]
 WP_YAW_BEHAVIOR 1      # Yaw behavior during waypoint and RTL (Face next waypoint)
-WPNAV_SPEED 1000       # Horizontal speed [cm/s]
+WPNAV_SPEED 800       # Horizontal speed [cm/s]
 WPNAV_SPEED_DN 200     # Descent speed [cm/s]
 WPNAV_SPEED_UP 350     # Ascent speed [cm/s]
 WPNAV_ACCEL 100        # Horizontal acceleration in waypoint navigation [cm/s/s]
@@ -58,13 +58,13 @@ WPNAV_TER_MARGIN 10    # Max altitude error before vehicle stops during terrain 
 #---NOTCH FILTER High-pass notch filter for the IMU
 INS_HNTCH_ENABLE 1
 INS_HNTCH_FM_RAT 0.75
-INS_HNTCH_ATT 100
-INS_HNTCH_BW 22
-INS_HNTCH_FREQ 38
+INS_HNTCH_ATT 80
+INS_HNTCH_BW 20
+INS_HNTCH_FREQ 34
 INS_HNTCH_HMNCS 15
 INS_HNTCH_MODE 1
 INS_HNTCH_OPTS 16
-INS_HNTCH_REF 0.231798
+INS_HNTCH_REF 0.1986204
 
 #---FAILSAFES
 BATT_FS_LOW_ACT 2      # Low battery failsafe action (RTL)
@@ -93,18 +93,18 @@ MOT_THST_EXPO 0.5613   # Motor thrust curve exponential coefficient
 MOT_THST_HOVER 0.2570658  # Motor thrust needed to hover
 MOT_YAW_HEADROOM 200   # Minimum PWM range  for yaw control [PWM]
 SERVO1_FUNCTION 33     # Controls Motor1 output
-SERVO3_FUNCTION 34     # Controls Motor2 output
-SERVO2_FUNCTION 35     # Controls Motor3 output
+SERVO2_FUNCTION 34     # Controls Motor2 output
+SERVO3_FUNCTION 35     # Controls Motor3 output
 SERVO4_FUNCTION 36     # Controls Motor4 output
+SERVO5_FUNCTION 37     # Controls Motor5 output
+SERVO6_FUNCTION 38     # Controls Motor6 output
+SERVO7_FUNCTION 39     # Controls Motor7 output
+SERVO8_FUNCTION 40     # Controls Motor8 output
 MOT_PWM_TYPE 0         # Standard PWM type (Normal)
 MOT_PWM_MAX 1940       # Maximum PWM value for full throttle [PWM µs]
 MOT_PWM_MIN 1100       # Minimum PWM value to start throttle [PWM µs]
 MOT_SPIN_ARM 0.06      # Throttle level (0 to 1) at which motors start spinning when armed
 MOT_SPIN_MIN 0.09      # Throttle level (0 to 1) at which motors start generating thrust
-
-
-
-
 
 #---GPS
 GPS_AUTO_CONFIG 2      # Enable automatic configuration for GPS (DroneCAN GPS)
@@ -179,7 +179,7 @@ SERIAL3_OPTIONS 0
 SERIAL3_PROTOCOL -1
 
 #---DID
-DID_ENABLE 0           # Enable Drone ID     
+DID_ENABLE 1           # Enable Drone ID     
 DID_MAVPORT -1
 DID_OPTIONS 0
 DID_CANDRIVER 1        # Enable Drone ID via DroneCAN    
@@ -207,66 +207,66 @@ SERIAL4_OPTIONS 1024   # Bitmask for gremsy
 SERIAL4_PROTOCOL 2     # Mavlink2 Protocol
 
 #---MJOLNIR
-#RELAY1_PIN 55          # AUXOUT6
-#SERVO14_FUNCTION -1    # GPIO
-#RELAY1_FUNCTION 4      # CAMERA
+RELAY1_PIN 55          # AUXOUT6
+SERVO14_FUNCTION -1    # GPIO
+RELAY1_FUNCTION 4      # CAMERA
 
 #---ATC Automatic Throttle Control
-ATC_ACCEL_P_MAX 20000
-ATC_ACCEL_R_MAX 20000
+ATC_ACCEL_P_MAX 30000
+ATC_ACCEL_R_MAX 30000
 ATC_ACCEL_Y_MAX 7000
 ATC_ANG_LIM_TC 0.5
-ATC_ANG_PIT_P 5
-ATC_ANG_RLL_P 5
-ATC_ANG_YAW_P 4.16745
+ATC_ANG_PIT_P 8
+ATC_ANG_RLL_P 8
+ATC_ANG_YAW_P 5.4
 ATC_ANGLE_BOOST 1
 ATC_INPUT_TC 0.15
-ATC_RAT_PIT_D 0.008
+ATC_RAT_PIT_D 0.005
 ATC_RAT_PIT_D_FF 0
 ATC_RAT_PIT_FF 0
 ATC_RAT_PIT_FLTD 10
 ATC_RAT_PIT_FLTE 0
 ATC_RAT_PIT_FLTT 10
-ATC_RAT_PIT_I 0.1
+ATC_RAT_PIT_I 0.12
 ATC_RAT_PIT_IMAX 0.5
 ATC_RAT_PIT_NEF 0
 ATC_RAT_PIT_NTF 0
-ATC_RAT_PIT_P 0.1
+ATC_RAT_PIT_P 0.12
 ATC_RAT_PIT_PDMX 0
 ATC_RAT_PIT_SMAX 0
-ATC_RAT_RLL_D 0.008
+ATC_RAT_RLL_D 0.005
 ATC_RAT_RLL_D_FF 0
 ATC_RAT_RLL_FF 0
 ATC_RAT_RLL_FLTD 10
 ATC_RAT_RLL_FLTE 0
 ATC_RAT_RLL_FLTT 10
-ATC_RAT_RLL_I 0.1
+ATC_RAT_RLL_I 0.12
 ATC_RAT_RLL_IMAX 0.5
 ATC_RAT_RLL_NEF 0
 ATC_RAT_RLL_NTF 0
-ATC_RAT_RLL_P 0.1
+ATC_RAT_RLL_P 0.12
 ATC_RAT_RLL_PDMX 0
 ATC_RAT_RLL_SMAX 0
 ATC_RAT_YAW_D 0
 ATC_RAT_YAW_D_FF 0
 ATC_RAT_YAW_FF 0
-ATC_RAT_YAW_FLTD 20
+ATC_RAT_YAW_FLTD 0
 ATC_RAT_YAW_FLTE 1
 ATC_RAT_YAW_FLTT 15
-ATC_RAT_YAW_I 0.046
+ATC_RAT_YAW_I 0.06401945
 ATC_RAT_YAW_IMAX 0.5
 ATC_RAT_YAW_NEF 0
 ATC_RAT_YAW_NTF 0
-ATC_RAT_YAW_P 0.46
+ATC_RAT_YAW_P 0.6401945
 ATC_RAT_YAW_PDMX 0
 ATC_RAT_YAW_SMAX 0
 ATC_RATE_FF_ENAB 1
 ATC_RATE_P_MAX 0
 ATC_RATE_R_MAX 0
 ATC_RATE_Y_MAX 0
-ATC_SLEW_YAW 8000
+ATC_SLEW_YAW 6000
 ATC_THR_G_BOOST 0
-ATC_THR_MIX_MAN 0.1
+ATC_THR_MIX_MAN  0.1
 ATC_THR_MIX_MAX 0.5
 ATC_THR_MIX_MIN 0.1
 
@@ -274,35 +274,35 @@ ATC_THR_MIX_MIN 0.1
 PSC_ACCZ_D 0
 PSC_ACCZ_D_FF 0
 PSC_ACCZ_FF 0
-PSC_ACCZ_FLTD 0
-PSC_ACCZ_FLTE 20
-PSC_ACCZ_FLTT 0
-PSC_ACCZ_I 0.665995
+PSC_ACCZ_FLTD 10
+PSC_ACCZ_FLTE 0
+PSC_ACCZ_FLTT 10
+PSC_ACCZ_I 0.4
 PSC_ACCZ_IMAX 800
 PSC_ACCZ_NEF 0
 PSC_ACCZ_NTF 0
-PSC_ACCZ_P 0.3329975
+PSC_ACCZ_P 0.2
 PSC_ACCZ_PDMX 0
 PSC_ACCZ_SMAX 0
 PSC_ANGLE_MAX 0
 PSC_JERK_XY 5
 PSC_JERK_Z 5
-PSC_POSXY_P 0.5
+PSC_POSXY_P 0.1
 PSC_POSZ_P 1
-PSC_VELXY_D 0.5
+PSC_VELXY_D 0.05
 PSC_VELXY_FF 0
-PSC_VELXY_FLTD 5
-PSC_VELXY_FLTE 5
-PSC_VELXY_I 0.5
+PSC_VELXY_FLTD 1.5
+PSC_VELXY_FLTE 1.5
+PSC_VELXY_I 0.4
 PSC_VELXY_IMAX 1000
-PSC_VELXY_P 1
+PSC_VELXY_P 0.75
 PSC_VELZ_D 0
 PSC_VELZ_FF 0
 PSC_VELZ_FLTD 5
 PSC_VELZ_FLTE 5
 PSC_VELZ_I 0
 PSC_VELZ_IMAX 1000
-PSC_VELZ_P 2.5
+PSC_VELZ_P 5
 
 #---LOIT Loiter Parameters
 LOIT_ANG_MAX 25
@@ -310,51 +310,51 @@ LOIT_BRK_ACCEL 250
 LOIT_BRK_DELAY 0.5
 LOIT_BRK_JERK 500
 LOIT_SPEED 1250
-LOIT_ACC_MAX 566.1873
+LOIT_ACC_MAX 600
 
 #---FENCE Geofencing system
-FENCE_ENABLE 0
+FENCE_ENABLE 1
 FENCE_ACTION 1
-FENCE_ALT_MAX 100
+FENCE_ALT_MAX 500
 FENCE_ALT_MIN -10
 FENCE_MARGIN 2
-FENCE_RADIUS 300
+FENCE_RADIUS 10000
 FENCE_TOTAL 0
-FENCE_TYPE 7
+FENCE_TYPE 3
 
 #---PSC Primary Stabilization Controller
 PSC_ACCZ_D 0
 PSC_ACCZ_D_FF 0
 PSC_ACCZ_FF 0
-PSC_ACCZ_FLTD 0
-PSC_ACCZ_FLTE 20
-PSC_ACCZ_FLTT 0
-PSC_ACCZ_I 0.665995
+PSC_ACCZ_FLTD 10
+PSC_ACCZ_FLTE 0
+PSC_ACCZ_FLTT 10
+PSC_ACCZ_I 0.4
 PSC_ACCZ_IMAX 800
 PSC_ACCZ_NEF 0
 PSC_ACCZ_NTF 0
-PSC_ACCZ_P 0.3329975
+PSC_ACCZ_P 0.2
 PSC_ACCZ_PDMX 0
 PSC_ACCZ_SMAX 0
 PSC_ANGLE_MAX 0
 PSC_JERK_XY 5
 PSC_JERK_Z 5
-PSC_POSXY_P 0.5
+PSC_POSXY_P 0.1
 PSC_POSZ_P 1
-PSC_VELXY_D 0.5
+PSC_VELXY_D 0.05
 PSC_VELXY_FF 0
-PSC_VELXY_FLTD 5
-PSC_VELXY_FLTE 5
-PSC_VELXY_I 0.5
+PSC_VELXY_FLTD 1.5
+PSC_VELXY_FLTE 1.5
+PSC_VELXY_I 0.4
 PSC_VELXY_IMAX 1000
-PSC_VELXY_P 1
+PSC_VELXY_P 0.75
 PSC_VELZ_D 0
 PSC_VELZ_FF 0
 PSC_VELZ_FLTD 5
 PSC_VELZ_FLTE 5
 PSC_VELZ_I 0
 PSC_VELZ_IMAX 1000
-PSC_VELZ_P 2.5
+PSC_VELZ_P 5
 
 #---RC
 RC_FS_TIMEOUT 1
@@ -369,11 +369,11 @@ RC1_OPTION 0
 RC1_REVERSED 0
 RC1_TRIM 1515
 RC10_DZ 0
-RC10_MAX 1927
-RC10_MIN 1102
+RC10_MAX 1900
+RC10_MIN 1100
 RC10_OPTION 0
 RC10_REVERSED 0
-RC10_TRIM 1515
+RC10_TRIM 1500
 RC11_DZ 0
 RC11_MAX 1900
 RC11_MIN 1100
@@ -415,13 +415,13 @@ RC2_MAX 1927
 RC2_MIN 1102
 RC2_OPTION 0
 RC2_REVERSED 0
-RC2_TRIM 1518
+RC2_TRIM 1515
 RC3_DZ 30
 RC3_MAX 1927
 RC3_MIN 1102
 RC3_OPTION 0
 RC3_REVERSED 0
-RC3_TRIM 1515
+RC3_TRIM 1518
 RC4_DZ 20
 RC4_MAX 1927
 RC4_MIN 1102
@@ -429,29 +429,29 @@ RC4_OPTION 0
 RC4_REVERSED 0
 RC4_TRIM 1515
 RC5_DZ 0
-RC5_MAX 1900
-RC5_MIN 1100
+RC5_MAX 1869
+RC5_MIN 1119
 RC5_OPTION 0
 RC5_REVERSED 0
-RC5_TRIM 1500
+RC5_TRIM 1515
 RC6_DZ 0
-RC6_MAX 2000
-RC6_MIN 1000
+RC6_MAX 2006
+RC6_MIN 982
 RC6_OPTION 0
 RC6_REVERSED 0
-RC6_TRIM 1000
+RC6_TRIM 1491
 RC7_DZ 0
-RC7_MAX 1900
-RC7_MIN 1100
-RC7_OPTION 0
+RC7_MAX 2006
+RC7_MIN 982
+RC7_OPTION 4
 RC7_REVERSED 0
-RC7_TRIM 1500
+RC7_TRIM 982
 RC8_DZ 0
-RC8_MAX 1900
-RC8_MIN 1100
-RC8_OPTION 0
+RC8_MAX 2006
+RC8_MIN 982
+RC8_OPTION 16
 RC8_REVERSED 0
-RC8_TRIM 1500
+RC8_TRIM 982
 RC9_DZ 0
 RC9_MAX 1900
 RC9_MIN 1100

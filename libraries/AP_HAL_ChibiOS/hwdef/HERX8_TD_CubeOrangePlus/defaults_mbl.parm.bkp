@@ -37,8 +37,8 @@ TUNE_MIN 0             # Minimum tuning value
 #---NAVIGATION IMU
 EK3_IMU_MASK 7         # Bitmask for IMU sensors used by EKF3 (Enabling all three IMUs)
 EK3_SRC1_POSZ 3        # Primary source for height estimation (GPS)
-EK3_SRC1_YAW 1         # Compass source
-EK3_SRC2_YAW 0         # No source
+EK3_SRC1_YAW 2         # GPS source
+EK3_SRC2_YAW 1         # Compass source
 EK3_AFFINITY 6         # EKF core affinity for different sensors (Barometer and compass)
 INS_GYRO_FILTER 20     # Gyro filter cutoff frequency [Hz]
 INS_ACCEL_FILTER 10    # Accel filter cutoff frequency [Hz]
@@ -97,7 +97,7 @@ SERVO2_FUNCTION 34     # Controls Motor2 output
 SERVO3_FUNCTION 35     # Controls Motor3 output
 SERVO4_FUNCTION 36     # Controls Motor4 output
 SERVO5_FUNCTION 37     # Controls Motor5 output
-SERVO6_FUNCTION 38     # Controls Motor6 output     
+SERVO6_FUNCTION 38     # Controls Motor6 output
 SERVO7_FUNCTION 39     # Controls Motor7 output
 SERVO8_FUNCTION 40     # Controls Motor8 output
 MOT_PWM_TYPE 0         # Standard PWM type (Normal)
@@ -110,11 +110,11 @@ MOT_SPIN_MIN 0.09      # Throttle level (0 to 1) at which motors start generatin
 GPS_AUTO_CONFIG 2      # Enable automatic configuration for GPS (DroneCAN GPS)
 CAN_P1_DRIVER 1        # Index of virtual driver to be used with physical CAN interface
 CAN_D1_PROTOCOL 1      # Protocol for CAN driver 1 (DroneCAN)
-GPS_TYPE 9             # 1st GPS type (DroneCAN-MovingBaseline Base)
-GPS_TYPE2 9            # 2nd GPS type (DroneCAN-MovingBaseline Rover)
+GPS_TYPE 22             # 1st GPS type (DroneCAN-MovingBaseline Base)
+GPS_TYPE2 23            # 2nd GPS type (DroneCAN-MovingBaseline Rover)
 GPS_AUTO_SWITCH 1      # Automatic Switchover (UseBest)
-GPS1_CAN_OVRIDE 0      # GPS1 CAN ID
-GPS2_CAN_OVRIDE 0      # GPS2 CAN ID
+GPS1_CAN_OVRIDE 21     # GPS1 CAN ID
+GPS2_CAN_OVRIDE 22     # GPS2 CAN ID
 
 #---MOVING BASELINE
 GPS_POS1_X 0
@@ -179,7 +179,7 @@ SERIAL3_OPTIONS 0
 SERIAL3_PROTOCOL -1
 
 #---DID
-DID_ENABLE 0           # Enable Drone ID     
+DID_ENABLE 1           # Enable Drone ID     
 DID_MAVPORT -1
 DID_OPTIONS 0
 DID_CANDRIVER 1        # Enable Drone ID via DroneCAN    

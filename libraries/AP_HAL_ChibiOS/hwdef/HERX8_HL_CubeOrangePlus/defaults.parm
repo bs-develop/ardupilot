@@ -5,7 +5,7 @@ AHRS_ORIENTATION 0     # Board orientation (Level orientation)
 INITIAL_MODE 5         # Initial flight mode at startup (LOITER)
 ANGLE_MAX 3000         # Maximum lean angle in all flight modes [centidegrees]
 LAND_SPEED_HIGH 150    # The descent speed for the first stage of landing [cm/s]
-ARMING_CHECK 982526    # BitMask for arming check
+ARMING_CHECK 982527    # BitMamisk for arming check (Not Check Camera)
 
 #---SYSTEM
 BRD_HEAT_LOWMGN 10     # Board temperature safety margin [°C] 
@@ -78,15 +78,20 @@ FS_EKF_ACTION 2        # If it loses reliable attitude/position estimation fails
 FS_OPTIONS 3           # Failsafe options (Continue if in auto on RC and GCS failsafe)
 FS_THR_VALUE 910       # PWM level on channel 3 below which throttle failsafe triggers [PWM µs]
 
-#---BATTERY
-BATT_ARM_VOLT 46       # Minimum voltage required for arming [V]
+#---BATTERIES
 MOT_BAT_VOLT_MAX 52.2  # Maximum voltage for thrust scaling  [V]
 MOT_BAT_VOLT_MIN 39.6  # Minimum voltage for thrust scaling [V]
-BATT_MONITOR 4         # Battery monitoring type (Analog Voltage and Current)
-#-------MAUCH PARAMETERS
-BATT_AMP_PERVLT 156.7607  # Number of amps that a 1V reading on the current sensor corresponds to [A/V]
-BATT_VOLT_MULT 19.00406   # Multiplier of the voltage sensing pin  to the actual battery's voltage
+#1
+BATT_MONITOR 8         # Battery monitoring type (Analog Voltage and Current)
+BATT_SERIAL_NUM 1
+BATT_ARM_VOLT 46       # Minimum voltage required for arming [V]
 BATT_CAPACITY 25000    # Battery capacity [mAh]
+
+#2
+BATT2_MONITOR 8         # Battery monitoring type (Analog Voltage and Current)
+BATT2_SERIAL_NUM 2
+BATT2_ARM_VOLT 46       # Minimum voltage required for arming [V]
+BATT2_CAPACITY 25000    # Battery capacity [mAh]
 
 #---MOTORS
 MOT_THST_EXPO 0.5613   # Motor thrust curve exponential coefficient
@@ -110,8 +115,8 @@ MOT_SPIN_MIN 0.09      # Throttle level (0 to 1) at which motors start generatin
 GPS_AUTO_CONFIG 2      # Enable automatic configuration for GPS (DroneCAN GPS)
 CAN_P1_DRIVER 1        # Index of virtual driver to be used with physical CAN interface
 CAN_D1_PROTOCOL 1      # Protocol for CAN driver 1 (DroneCAN)
-GPS_TYPE 22             # 1st GPS type (DroneCAN-MovingBaseline Base)
-GPS_TYPE2 23            # 2nd GPS type (DroneCAN-MovingBaseline Rover)
+GPS_TYPE 9             # 1st GPS type (DroneCAN-MovingBaseline Base)
+GPS_TYPE2 9            # 2nd GPS type (DroneCAN-MovingBaseline Rover)
 GPS_AUTO_SWITCH 1      # Automatic Switchover (UseBest)
 GPS1_CAN_OVRIDE 21     # GPS1 CAN ID
 GPS2_CAN_OVRIDE 22     # GPS2 CAN ID
@@ -148,6 +153,7 @@ SERIAL1_PROTOCOL 1     # Protocol type: MAVLink1
 SERIAL2_BAUD 115
 SERIAL2_OPTIONS 0
 SERIAL2_PROTOCOL 2     # Protocol type: MAVLink2
+
 #---FLIGHT
 FLTMODE_CH 0           # RC Channel to use for flight mode control (Disabled)
 FLTMODE1 0             # (Stabilize)
@@ -179,7 +185,7 @@ SERIAL3_OPTIONS 0
 SERIAL3_PROTOCOL -1
 
 #---DID
-DID_ENABLE 1           # Enable Drone ID     
+DID_ENABLE 0           # Enable Drone ID     
 DID_MAVPORT -1
 DID_OPTIONS 0
 DID_CANDRIVER 1        # Enable Drone ID via DroneCAN    
@@ -200,8 +206,8 @@ CAM1_SERVO_ON 1900
 CAM1_TRIGG_DIST 0
 
 #---GREMSY GIMBAL
-MNT1_TYPE 6            # Gremmsy Mount type
-MNT1_DEFLT_MODE 2      # Mavlink Targeting
+#MNT1_TYPE 6            # Gremmsy Mount type
+#MNT1_DEFLT_MODE 2      # Mavlink Targeting
 SERIAL4_BAUD 115
 SERIAL4_OPTIONS 1024   # Bitmask for gremsy
 SERIAL4_PROTOCOL 2     # Mavlink2 Protocol
