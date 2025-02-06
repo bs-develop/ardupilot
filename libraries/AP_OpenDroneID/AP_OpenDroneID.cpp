@@ -282,7 +282,8 @@ void AP_OpenDroneID::send_static_out()
     // we need to notify user if we lost system msg with operator location
     if (now_ms - last_system_ms > 5000 && now_ms - last_lost_operator_msg_ms > 5000) {
         last_lost_operator_msg_ms = now_ms;
-        GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "ODID: lost operator location");
+        //BS-COMMENT
+        //GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "ODID: lost operator location");
     }
     
     const uint32_t msg_spacing_ms = _mavlink_static_period_ms / 4;
