@@ -110,6 +110,14 @@ void AP_OpenDroneID::init()
     _chan = mavlink_channel_t(gcs().get_channel_from_port_number(_mav_port));
     _initialised = true;
 }
+/*
+//BS-COMMENT RESET CUBE
+void AP_OpenDroneID::load_UAS_ID_from_persistent_memory()
+{
+    GCS_SEND_TEXT(MAV_SEVERITY_INFO, "No data readedY"); 
+    id_len = 0;
+}
+*/
 
 void AP_OpenDroneID::load_UAS_ID_from_persistent_memory()
 {
@@ -128,6 +136,7 @@ void AP_OpenDroneID::load_UAS_ID_from_persistent_memory()
         id_len = 0;
     }
 }
+
 
 void AP_OpenDroneID::set_basic_id() {
     if (pkt_basic_id.id_type != MAV_ODID_ID_TYPE_NONE) {
@@ -282,7 +291,7 @@ void AP_OpenDroneID::send_static_out()
     // we need to notify user if we lost system msg with operator location
     if (now_ms - last_system_ms > 5000 && now_ms - last_lost_operator_msg_ms > 5000) {
         last_lost_operator_msg_ms = now_ms;
-        //BS-COMMENT
+        //BS-COMMENT SEND OPERATOR LOCATION
         //GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "ODID: lost operator location");
     }
     
