@@ -2,11 +2,14 @@
 
 # MCU class and specific type
 MCU STM32H7xx STM32H757xx
+include ../CubeOrange/hwdef.inc
+
+define AP_CUSTOM_FIRMWARE_STRING "HERX4_HL_M1_copter_457_OP"
+
 
 define CORE_CM7
 define SMPS_PWR
 
-include ../CubeOrange/hwdef.inc
 
 undef USB_STRING_PRODUCT
 undef USB_STRING_MANUFACTURER
