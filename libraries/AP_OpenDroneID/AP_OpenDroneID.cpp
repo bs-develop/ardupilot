@@ -38,6 +38,7 @@
 #include <AP_Baro/AP_Baro.h>
 #include <AP_AHRS/AP_AHRS.h>
 #include <AP_Parachute/AP_Parachute.h>
+#include <AP_BattMonitor/AP_BattMonitor.h>
 #include <AP_Vehicle/AP_Vehicle.h>
 #include <AP_DroneCAN/AP_DroneCAN.h>
 #include <stdio.h>
@@ -166,11 +167,6 @@ bool AP_OpenDroneID::pre_arm_check(char* failmsg, uint8_t failmsg_len)
         return true;
     }
 
-    if(_enable == 0) {
-        strncpy(failmsg, "DID_ENABLE must be 1", failmsg_len);
-        return false;
-    }
-
     if (pkt_basic_id.id_type == MAV_ODID_ID_TYPE_NONE) {
         strncpy(failmsg, "UA_TYPE required in BasicID", failmsg_len);
         return false;
@@ -287,7 +283,8 @@ void AP_OpenDroneID::send_static_out()
     // we need to notify user if we lost system msg with operator location
     if (now_ms - last_system_ms > 5000 && now_ms - last_lost_operator_msg_ms > 5000) {
         last_lost_operator_msg_ms = now_ms;
-        GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "ODID: lost operator location");
+        //BS-COMMENT SEND OPERATOR LOCATION
+        //GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "ODID: lost operator location");
     }
     
     const uint32_t msg_spacing_ms = _mavlink_static_period_ms / 4;
@@ -341,6 +338,10 @@ void AP_OpenDroneID::send_location_message()
 
     const AP_GPS::GPS_Status gps_status = gps.status();
     const bool got_bad_gps_fix = (gps_status < AP_GPS::GPS_Status::GPS_OK_FIX_3D);
+           
+    const AP_BattMonitor &_battery = AP::battery();
+    const bool battery_failsafed = _battery.has_failsafed();
+    
     const bool armed = hal.util->get_soft_armed();
 
     Location current_location;
@@ -359,6 +360,16 @@ void AP_OpenDroneID::send_location_message()
         // if in crashed state also declare an emergency
         uav_status = MAV_ODID_STATUS_EMERGENCY;
     }
+    
+    // if we are armed and flight mode is althold then we have an emergency
+    if (armed && AP::vehicle()->get_mode() == 2) {      // Magic number for ALT_HOLD ! This is only valid for Copter
+        uav_status = MAV_ODID_STATUS_EMERGENCY;
+    }
+
+     if (armed && battery_failsafed) {
+         // if we are armed and battery failsafe is triggered then we have an emergency
+         uav_status = MAV_ODID_STATUS_EMERGENCY;
+     }
 
     // if we are armed with no GPS fix and we haven't specifically
     // allowed for non-GPS operation then declare an emergency
@@ -516,7 +527,14 @@ void AP_OpenDroneID::send_system_message()
         mavlink_msg_open_drone_id_system_send_struct(_chan, &pkt_system);
     }
 }
-
+/*
+//BS-COMMENT RESET CUBE
+void AP_OpenDroneID::load_UAS_ID_from_persistent_memory()
+{
+    GCS_SEND_TEXT(MAV_SEVERITY_INFO, "No data readedY"); 
+    id_len = 0;
+}
+*/
 void AP_OpenDroneID::send_self_id_message()
 {
     need_send_self_id |= dronecan_send_all;
