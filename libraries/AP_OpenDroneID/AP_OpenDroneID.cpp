@@ -205,6 +205,8 @@ void AP_OpenDroneID::update()
     if (_enable == 0) {
         return;
     }
+     // BS-COMMENT: Send EU classification type
+    pkt_system.classification_type = MAV_ODID_CLASSIFICATION_TYPE_EU;
 
     if ((pkt_basic_id.id_type == MAV_ODID_ID_TYPE_SERIAL_NUMBER)
         && (_options & LockUASIDOnFirstBasicIDRx)
@@ -390,7 +392,9 @@ void AP_OpenDroneID::send_location_message()
     }
 
     float direction = ODID_INV_DIR;
-    if (!got_bad_gps_fix) {
+    //BS-COMMENT send direction when the drone is moving a bigger speed that the threshold
+    float ground_speed_magnitude = ahrs.groundspeed_vector().length();
+    if (!got_bad_gps_fix and ground_speed_magnitude > ODID_MIN_GROUND_SPEED ) {
         direction = wrap_360(degrees(ahrs.groundspeed_vector().angle())); // heading (degrees)
     }
 
@@ -473,7 +477,8 @@ void AP_OpenDroneID::send_location_message()
     float timestamp = ODID_INV_TIMESTAMP;
     if (!got_bad_gps_fix) {
         uint32_t time_week_ms = gps.time_week_ms();
-        timestamp = float(time_week_ms % (3600 * 1000)) * 0.001;
+        //BS-COMMENT CHANGE TO UTC
+        timestamp = float(time_week_ms % (3600 * 1000)) * 0.001 +18;
         timestamp = create_location_timestamp(timestamp);   //make sure timestamp is within Remote ID limit
     }
 
@@ -543,18 +548,54 @@ void AP_OpenDroneID::send_self_id_message()
     }
 }
 
+
+//BS-COMMENT Update to send Take Off Location
 void AP_OpenDroneID::send_system_update_message()
 {
     need_send_system |= dronecan_send_all;
-    // note that packet is filled in by the GCS
+        
+    // Default values (use drone location or fallback to zero)
+    int32_t op_lat = 0;
+    int32_t op_lon = 0;
+    float op_alt_geo = 0.0f;
+    uint32_t timestamp = 0;
+    
+    // Force use current drone location as operator location
+    if (_takeoff_location.check_latlng() and pkt_system.operator_location_type ==0) {
+        op_lat = _takeoff_location.lat;
+        op_lon = _takeoff_location.lng;
+        
+        // Get current altitude in geodetic format
+        int32_t alt_amsl_cm;
+        if (_takeoff_location.get_alt_cm(Location::AltFrame::ABSOLUTE, alt_amsl_cm)) {
+            op_alt_geo = alt_amsl_cm * 0.01; // convert cm to meters
+            
+            // Subtract undulation to get geodetic altitude
+            const auto &gps = AP::gps();
+            float undulation;
+            if (gps.get_undulation(undulation)) {
+                op_alt_geo -= undulation;
+            }
+        }
+        
+        const auto &gps = AP::gps();
+        if (gps.status() >= AP_GPS::GPS_Status::GPS_OK_FIX_3D) {
+            uint32_t time_week_ms = gps.time_week_ms();
+            timestamp = float(time_week_ms % (3600 * 1000)) * 0.001 +18; // seconds in current hour
+        }
+    }
+    pkt_system.operator_latitude = op_lat;
+    pkt_system.operator_longitude = op_lon;
+    pkt_system.operator_altitude_geo = op_alt_geo;
+    pkt_system.timestamp = timestamp;
     if (_chan != MAV_CHAN_INVALID) {
         const auto pkt_system_update = mavlink_open_drone_id_system_update_t {
-        operator_latitude : pkt_system.operator_latitude,
-        operator_longitude : pkt_system.operator_longitude,
-        operator_altitude_geo : pkt_system.operator_altitude_geo,
-        timestamp : pkt_system.timestamp,
-        target_system : pkt_system.target_system,
-        target_component : pkt_system.target_component,
+            operator_latitude : op_lat,
+            operator_longitude : op_lon,
+            operator_altitude_geo : op_alt_geo,
+            timestamp : timestamp,
+            target_system : pkt_system.target_system,
+            target_component : pkt_system.target_component,
         };
         mavlink_msg_open_drone_id_system_update_send_struct(_chan, &pkt_system_update);
     }
@@ -790,6 +831,8 @@ void AP_OpenDroneID::handle_msg(mavlink_channel_t chan, const mavlink_message_t 
         break;
     case MAVLINK_MSG_ID_OPEN_DRONE_ID_SYSTEM:
         mavlink_msg_open_drone_id_system_decode(&msg, &pkt_system);
+         // BS-COMMENT: Send EU classification type
+        pkt_system.classification_type = MAV_ODID_CLASSIFICATION_TYPE_EU;
         last_system_ms = AP_HAL::millis();
         break;
     case MAVLINK_MSG_ID_OPEN_DRONE_ID_SYSTEM_UPDATE: {

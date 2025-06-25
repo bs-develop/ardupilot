@@ -75,17 +75,23 @@ INS_HNTCH_OPTS 16
 INS_HNTCH_REF 0.1986204
 
 #---FAILSAFES
-BATT_FS_LOW_ACT 2      # Low battery failsafe action (RTL)
-BATT_LOW_VOLT 43.7     # Low battery voltage warning threshold [V]
-BATT_LOW_MAH 0         # Low battery capacity warning threshold [mAh] (Disabled)
-BATT_FS_CRT_ACT 1      # Critical battery failsafe action (Land)
-BATT_CRT_VOLT 41.5     # Critical battery voltage threshold [V]
-BATT_CRT_MAH 0         # Critical battery capacity threshold [mAh] (Disabled)
-FS_GCS_ENABLE 0        # Ground Control Station failsafe (Disabled)
-FS_EKF_ACTION 2        # If it loses reliable attitude/position estimation failsafe action (AltHold)
-FS_OPTIONS 3           # Failsafe options (Continue if in auto on RC and GCS failsafe)
-FS_THR_VALUE 910       # PWM level on channel 3 below which throttle failsafe triggers [PWM µs]
-FS_THR_ENABLE 1        # Throttle Failsafe Enable, Enabled always RTL
+BATT_FS_LOW_ACT 2       # Low battery failsafe action (RTL)
+BATT2_FS_LOW_ACT 2      # Low battery failsafe action (RTL)
+BATT_LOW_VOLT 43.7      # Low battery voltage warning threshold [V]
+BATT2_LOW_VOLT 43.7     # Low battery voltage warning threshold [V]
+BATT_LOW_MAH 0          # Low battery capacity warning threshold [mAh] (Disabled)
+BATT2_LOW_MAH 0         # Low battery capacity warning threshold [mAh] (Disabled)
+BATT_FS_CRT_ACT 1       # Critical battery failsafe action (Land)
+BATT2_FS_CRT_ACT 1      # Critical battery failsafe action (Land)
+BATT_CRT_VOLT 41.5      # Critical battery voltage threshold [V]
+BATT2_CRT_VOLT 41.5     # Critical battery voltage threshold [V]
+BATT_CRT_MAH 0          # Critical battery capacity threshold [mAh] (Disabled)
+BATT2_CRT_MAH 0         # Critical battery capacity threshold [mAh] (Disabled)
+FS_GCS_ENABLE 0         # Ground Control Station failsafe (Disabled)
+FS_EKF_ACTION 2         # If it loses reliable attitude/position estimation failsafe action (AltHold)
+FS_OPTIONS 3            # Failsafe options (Continue if in auto on RC and GCS failsafe)
+FS_THR_VALUE 910        # PWM level on channel 3 below which throttle failsafe triggers [PWM µs]
+FS_THR_ENABLE 1         # Throttle Failsafe Enable, Enabled always RTL
 
 #---BATTERIES
 MOT_BAT_VOLT_MAX 52.2  # Maximum voltage for thrust scaling  [V]
