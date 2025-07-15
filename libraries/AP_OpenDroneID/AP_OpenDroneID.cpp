@@ -41,6 +41,7 @@
 #include <AP_BattMonitor/AP_BattMonitor.h>
 #include <AP_Vehicle/AP_Vehicle.h>
 #include <AP_DroneCAN/AP_DroneCAN.h>
+#include <RC_Channel/RC_Channel.h>
 #include <stdio.h>
 #include <GCS_MAVLink/GCS.h>
 
@@ -286,7 +287,7 @@ void AP_OpenDroneID::send_static_out()
     if (now_ms - last_system_ms > 5000 && now_ms - last_lost_operator_msg_ms > 5000) {
         last_lost_operator_msg_ms = now_ms;
         //BS-COMMENT SEND OPERATOR LOCATION
-        //GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "ODID: lost operator location");
+        GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "ODID: lost operator location");
     }
     
     const uint32_t msg_spacing_ms = _mavlink_static_period_ms / 4;
@@ -351,34 +352,40 @@ void AP_OpenDroneID::send_location_message()
         return;
     }
     uint8_t uav_status = hal.util->get_soft_armed()? MAV_ODID_STATUS_AIRBORNE : MAV_ODID_STATUS_GROUND;
+    // BS-COMMENT set emergency status if chute is released
 #if HAL_PARACHUTE_ENABLED
-    // set emergency status if chute is released
     const auto *parachute = AP::parachute();
     if (parachute != nullptr && parachute->released()) {
         uav_status = MAV_ODID_STATUS_EMERGENCY;
     }
 #endif
+    // BS-COMMENT if in crashed state also declare an emergency
     if (AP::vehicle()->is_crashed()) {
-        // if in crashed state also declare an emergency
         uav_status = MAV_ODID_STATUS_EMERGENCY;
     }
     
-    // if we are armed and flight mode is althold then we have an emergency
+    // BS-COMMENT if we are armed and flight mode is althold then we have an emergency
     if (armed && AP::vehicle()->get_mode() == 2) {      // Magic number for ALT_HOLD ! This is only valid for Copter
         uav_status = MAV_ODID_STATUS_EMERGENCY;
     }
-
+    // BS-COMMENT if we are armed and battery failsafe is triggered then we have an emergency
      if (armed && battery_failsafed) {
-         // if we are armed and battery failsafe is triggered then we have an emergency
          uav_status = MAV_ODID_STATUS_EMERGENCY;
-     }
-
-    // if we are armed with no GPS fix and we haven't specifically
+    }
+    // BS-COMMENT If there is no RC signal
+    if (armed && !rc().has_valid_input()) {
+        uav_status = MAV_ODID_STATUS_EMERGENCY;
+    }
+    // BS-COMMENT if we are armed with no GPS fix and we haven't specifically
     // allowed for non-GPS operation then declare an emergency
     if (got_bad_gps_fix && armed && !option_enabled(Options::AllowNonGPSPosition)) {
         uav_status = MAV_ODID_STATUS_EMERGENCY;
     }
-
+    // BS-COMMENT If there is no GCS signal
+    const uint32_t now_ms = AP_HAL::millis();
+    if (now_ms - last_system_update_ms > 5000) {
+        uav_status = MAV_ODID_STATUS_EMERGENCY;
+    }
     // if we are disarmed and falling at over 3m/s then declare an
     // emergency. This covers cases such as deliberate crash with
     // advanced failsafe and an unintended reboot or in-flight disarm
