@@ -485,7 +485,7 @@ void AP_OpenDroneID::send_location_message()
     if (!got_bad_gps_fix) {
         uint32_t time_week_ms = gps.time_week_ms();
         //BS-COMMENT CHANGE TO UTC
-        timestamp = float(time_week_ms % (3600 * 1000)) * 0.001 +18;
+        timestamp = float(time_week_ms % (3600 * 1000)) * 0.001 - 18;
         timestamp = create_location_timestamp(timestamp);   //make sure timestamp is within Remote ID limit
     }
 
