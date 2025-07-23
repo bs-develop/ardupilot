@@ -72,6 +72,7 @@
 #include <AP_OpticalFlow/AP_OpticalFlow.h>
 #include <AP_Winch/AP_Winch_config.h>
 #include <AP_SurfaceDistance/AP_SurfaceDistance.h>
+#include <BS_Hercules/BS_Hercules.h>
 
 // Configuration
 #include "defines.h"
@@ -545,6 +546,7 @@ private:
 #if FRAME_CONFIG == HELI_FRAME
     AC_InputManager_Heli input_manager;
 #endif
+
 
 #if HAL_ADSB_ENABLED
     AP_ADSB adsb;
@@ -1078,6 +1080,7 @@ private:
     void exit_mode(Mode *&old_flightmode, Mode *&new_flightmode);
 
 public:
+BS_Hercules bsHercules;
     void failsafe_check();      // failsafe.cpp
 };
 

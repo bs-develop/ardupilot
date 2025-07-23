@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+def build(bld):
+    # This tells Waf to build a static library named 'BS_Hercules'
+    # from the source file 'BS_Hercules.cpp' located in this directory.
+    bld.add_supported_library(
+        name='BS_Hercules',
+        src_list='BS_Hercules.cpp',
+        # Add any other includes if BS_Hercules.cpp needs them
+        # For example, if it uses other ArduPilot libraries directly:
+        # ap_libraries=['AP_Param', 'AP_Common']
+    )
