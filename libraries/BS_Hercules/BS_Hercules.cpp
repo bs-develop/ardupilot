@@ -1,5 +1,6 @@
-// @Group: BS_
+// @Group: BS
 // @Path: libraries/BS_Hercules/BS_Hercules.cpp
+
 #include "BS_Hercules.h" // Must include your own header file!
 
 const AP_Param::GroupInfo BS_Hercules::var_info[] = {
