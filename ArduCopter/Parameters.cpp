@@ -475,7 +475,8 @@ const AP_Param::Info Copter::var_info[] = {
     // @Path: ../libraries/AP_Compass/AP_Compass.cpp
     GOBJECT(compass,        "COMPASS_", Compass),
 
-
+    // @Group: BS_
+    // @Path: ../libraries/BS_Hercules/BS_Hercules.cpp
     GOBJECT(bsHercules,        "BS_", BS_Hercules),
 
     // @Group: INS

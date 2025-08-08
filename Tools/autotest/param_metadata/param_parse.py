@@ -412,10 +412,6 @@ def process_library(vehicle, library, pathprefix=None):
 
     current_file = None
 
-hercules_lib = Library("BS")
-setattr(hercules_lib, "Path", "BS_Hercules/BS_Hercules.cpp")
-libraries.append(hercules_lib)
-
 for library in libraries:
     debug("===\n\n\nProcessing library %s" % library.name)
 
