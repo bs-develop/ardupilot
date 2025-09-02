@@ -1,4 +1,4 @@
-#---HERX8_TD_M2_AC457_OP
+a#---HERX8_HL_M2_AC462_OP
 
 #---BASICS
 FRAME_CLASS 4          # OctaQuad configuration
@@ -53,8 +53,8 @@ INS_ACCEL_FILTER 10    # Accel filter cutoff frequency [Hz]
 WP_NAVALT_MIN 0.5      # Minimum navigation altitude [m]
 WP_YAW_BEHAVIOR 1      # Yaw behavior during waypoint and RTL (Face next waypoint)
 WPNAV_SPEED 800        # Horizontal speed [cm/s]
-WPNAV_SPEED_DN 200     # Descent speed [cm/s]
-WPNAV_SPEED_UP 350     # Ascent speed [cm/s]
+WPNAV_SPEED_DN 150     # Descent speed [cm/s]
+WPNAV_SPEED_UP 200     # Ascent speed [cm/s]
 WPNAV_ACCEL 100        # Horizontal acceleration in waypoint navigation [cm/s/s]
 WPNAV_ACCEL_C 0        # Acceleration during cornering [cm/s/s]
 WPNAV_ACCEL_Z 100      # Vertical acceleration [cm/s/s]
@@ -117,7 +117,7 @@ SERVO2_FUNCTION 34     # Controls Motor2 output
 SERVO3_FUNCTION 35     # Controls Motor3 output
 SERVO4_FUNCTION 36     # Controls Motor4 output
 SERVO5_FUNCTION 37     # Controls Motor5 output
-SERVO6_FUNCTION 38     # Controls Motor6 output     
+SERVO6_FUNCTION 38     # Controls Motor6 output
 SERVO7_FUNCTION 39     # Controls Motor7 output
 SERVO8_FUNCTION 40     # Controls Motor8 output
 MOT_PWM_TYPE 0         # Standard PWM type (Normal)
@@ -152,25 +152,31 @@ SERIAL_PASS1 0         # Serial pass-through first port selection
 SERIAL_PASS2 -1        # Serial pass-through second port selection
 SERIAL_PASSTIMO 15     # Timeout for pass-through [s]
 
-
+#------Herelink Camera
+SERVO13_FUNCTION 56    # Controls RCIN6
+SERVO13_MAX 1900
+SERVO13_MIN 1100
+SERVO13_REVERSED 0
+SERVO13_TRIM 1500
 
 #-----Telemetry RFD OR DOODLE
 SERIAL1_BAUD 57
 SERIAL1_OPTIONS 0
 SERIAL1_PROTOCOL 2     # Protocol type: MAVLink2 (RFD DID WORKS)
 
-#-----Telemetry TD
-SERIAL2_BAUD 57
+#----Telemetry HL
+SERIAL2_BAUD 115
 SERIAL2_OPTIONS 0
-SERIAL2_PROTOCOL 10    # Protocol type: FrSky SPort Passthrough (OpenTX)
+SERIAL2_PROTOCOL 2     # Protocol type: MAVLink2
+
 #---FLIGHT
-FLTMODE_CH 5           # RC Channel to use for flight mode control (Disabled)
-FLTMODE1 2             # (AltHold)
+FLTMODE_CH 0           # RC Channel to use for flight mode control (Disabled)
+FLTMODE1 0             # (Stabilize)
 FLTMODE2 0             # (Stabilize)
 FLTMODE3 0             # (Stabilize)
-FLTMODE4 2             # (AltHold)
+FLTMODE4 0             # (Stabilize)
 FLTMODE5 0             # (Stabilize)
-FLTMODE6 5             # (Loiter)
+FLTMODE6 0             # (Stabilize)
 FLTMODE_GCSBLOCK 0     # Modes disable for GCS (Stabilize)
 
 #-----ADS-B
@@ -215,11 +221,11 @@ CAM1_SERVO_ON 1900
 CAM1_TRIGG_DIST 0
 
 #---GREMSY GIMBAL
-MNT1_TYPE 6            # Gremmsy Mount type
-MNT1_DEFLT_MODE 2      # Mavlink Targeting
+MNT1_TYPE 6             # Gremmsy Mount type
+MNT1_DEFLT_MODE 2       # Mavlink Targeting
 SERIAL4_BAUD 115
-SERIAL4_OPTIONS 1024   # Bitmask for gremsy
-SERIAL4_PROTOCOL 2     # Mavlink2 Protocol
+SERIAL4_OPTIONS 1024    # Bitmask for gremsy
+SERIAL4_PROTOCOL 2      # Mavlink2 Protocol
 
 #---MJOLNIR
 RELAY1_PIN 55          # AUXOUT6
@@ -377,18 +383,18 @@ RC_OPTIONS 32
 RC_OVERRIDE_TIME 3
 RC_PROTOCOLS 1
 RC_SPEED 490
-RC1_DZ 30
-RC1_MAX 2006
-RC1_MIN 982
+RC1_DZ 20
+RC1_MAX 1927
+RC1_MIN 1102
 RC1_OPTION 0
 RC1_REVERSED 0
-RC1_TRIM 983
+RC1_TRIM 1515
 RC10_DZ 0
-RC10_MAX 2006
-RC10_MIN 982
+RC10_MAX 1900
+RC10_MIN 1100
 RC10_OPTION 0
 RC10_REVERSED 0
-RC10_TRIM 982
+RC10_TRIM 1500
 RC11_DZ 0
 RC11_MAX 1900
 RC11_MIN 1100
@@ -426,35 +432,35 @@ RC16_OPTION 0
 RC16_REVERSED 0
 RC16_TRIM 1500
 RC2_DZ 20
-RC2_MAX 2003
-RC2_MIN 988
+RC2_MAX 1927
+RC2_MIN 1102
 RC2_OPTION 0
 RC2_REVERSED 0
-RC2_TRIM 1495
-RC3_DZ 20
-RC3_MAX 2006
-RC3_MIN 987
+RC2_TRIM 1515
+RC3_DZ 30
+RC3_MAX 1927
+RC3_MIN 1102
 RC3_OPTION 0
-RC3_REVERSED 1
-RC3_TRIM 1500
+RC3_REVERSED 0
+RC3_TRIM 1518
 RC4_DZ 20
-RC4_MAX 2006
-RC4_MIN 982
+RC4_MAX 1927
+RC4_MIN 1102
 RC4_OPTION 0
 RC4_REVERSED 0
-RC4_TRIM 1495
+RC4_TRIM 1515
 RC5_DZ 0
-RC5_MAX 2006
-RC5_MIN 982
+RC5_MAX 1869
+RC5_MIN 1119
 RC5_OPTION 0
 RC5_REVERSED 0
-RC5_TRIM 982
+RC5_TRIM 1515
 RC6_DZ 0
 RC6_MAX 2006
 RC6_MIN 982
-RC6_OPTION 16
+RC6_OPTION 0
 RC6_REVERSED 0
-RC6_TRIM 982
+RC6_TRIM 1491
 RC7_DZ 0
 RC7_MAX 2006
 RC7_MIN 982
@@ -464,16 +470,16 @@ RC7_TRIM 982
 RC8_DZ 0
 RC8_MAX 2006
 RC8_MIN 982
-RC8_OPTION 0
+RC8_OPTION 16
 RC8_REVERSED 0
 RC8_TRIM 982
 RC9_DZ 0
-RC9_MAX 2006
-RC9_MIN 982
+RC9_MAX 1900
+RC9_MIN 1100
 RC9_OPTION 0
 RC9_REVERSED 0
-RC9_TRIM 1495
-RCMAP_PITCH 3
-RCMAP_ROLL 4
-RCMAP_THROTTLE 1
-RCMAP_YAW 2
+RC9_TRIM 1500
+RCMAP_PITCH 2
+RCMAP_ROLL 1
+RCMAP_THROTTLE 3
+RCMAP_YAW 4
