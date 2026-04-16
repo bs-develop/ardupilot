@@ -1965,6 +1965,25 @@ void AP_GPS::Write_GPS(uint8_t i)
         rtcm_fragments_discarded: rtcm_stats.fragments_discarded
     };
     AP::logger().WriteBlock(&pkt2, sizeof(pkt2));
+
+#if 0
+// BS-COMMENT[GPS-LOG]: GPTH write enabled - change #if 1 to #if 0 to disable
+    // BS-COMMENT[GPS-LOG]: Log GPS timing health fields to diagnose CAN-bus packet delays.
+    // delayed_count and average_delta_ms come from GPS_timing struct; lagged_sample_count from GPS_State.
+    // These mirror the delay_ok check in is_healthy() so you can correlate log data with health transitions.
+#ifndef HAL_BUILD_AP_PERIPH
+    const GPS_timing &t = timing[i];
+    const struct log_GPTH pkt3 {
+        LOG_PACKET_HEADER_INIT(LOG_GPTH_MSG),
+        time_us             : time_us,
+        instance            : i,
+        delayed_count       : t.delayed_count,
+        average_delta_ms    : t.average_delta_ms,
+        lagged_sample_count : state[i].lagged_sample_count,
+    };
+    AP::logger().WriteBlock(&pkt3, sizeof(pkt3));
+#endif // HAL_BUILD_AP_PERIPH
+#endif // BS-COMMENT[GPS-LOG]: GPTH disabled
 }
 #endif
 
