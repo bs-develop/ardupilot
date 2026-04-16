@@ -1,0 +1,447 @@
+#---------------------------------------------------------------------------------#
+#----------------------H8H32N9_V12MN32N_ACopter462OP------------------------------#
+#---------------------------------------------------------------------------------#
+#---IMU TEMPERATURE
+# Generated via onboard temperature calibration – DO NOT EDIT MANUALLY
+INS_TCAL1_ACC1_X 836.750403
+INS_TCAL1_ACC1_Y 580.968094
+INS_TCAL1_ACC1_Z -2179.976844
+INS_TCAL1_ACC2_X 7.357588
+INS_TCAL1_ACC2_Y -0.651153
+INS_TCAL1_ACC2_Z 26.247926
+INS_TCAL1_ACC3_X -0.105595
+INS_TCAL1_ACC3_Y -0.04598
+INS_TCAL1_ACC3_Z 0.735176
+INS_TCAL1_ENABLE 1
+INS_TCAL1_GYR1_X 14.779797
+INS_TCAL1_GYR1_Y 19.459769
+INS_TCAL1_GYR1_Z 14.958246
+INS_TCAL1_GYR2_X -0.076569
+INS_TCAL1_GYR2_Y 0.472795
+INS_TCAL1_GYR2_Z 1.077873
+INS_TCAL1_GYR3_X -0.007802
+INS_TCAL1_GYR3_Y -0.000094
+INS_TCAL1_GYR3_Z -0.012998
+INS_TCAL1_TMAX 65.1
+INS_TCAL1_TMIN -11.9
+
+INS_TCAL2_ACC1_X 1037.574275
+INS_TCAL2_ACC1_Y -769.344285
+INS_TCAL2_ACC1_Z -824.508357
+INS_TCAL2_ACC2_X -5.055295
+INS_TCAL2_ACC2_Y 4.019722
+INS_TCAL2_ACC2_Z -19.991567
+INS_TCAL2_ACC3_X -0.061257
+INS_TCAL2_ACC3_Y 0.04231
+INS_TCAL2_ACC3_Z 0.04987
+INS_TCAL2_ENABLE 1
+INS_TCAL2_GYR1_X -5.765623
+INS_TCAL2_GYR1_Y -54.446259
+INS_TCAL2_GYR1_Z -21.619479
+INS_TCAL2_GYR2_X 1.164787
+INS_TCAL2_GYR2_Y -0.444921
+INS_TCAL2_GYR2_Z -1.137834
+INS_TCAL2_GYR3_X -0.005065
+INS_TCAL2_GYR3_Y -0.001459
+INS_TCAL2_GYR3_Z -0.003796
+INS_TCAL2_TMAX 63.6
+INS_TCAL2_TMIN -13.4
+
+INS_TCAL3_ACC1_X 106.536181
+INS_TCAL3_ACC1_Y -728.324645
+INS_TCAL3_ACC1_Z -1775.630611
+INS_TCAL3_ACC2_X -4.508518
+INS_TCAL3_ACC2_Y 5.550847
+INS_TCAL3_ACC2_Z 36.065404
+INS_TCAL3_ACC3_X 0.005676
+INS_TCAL3_ACC3_Y 0.161565
+INS_TCAL3_ACC3_Z 2.914541
+INS_TCAL3_ENABLE 1
+INS_TCAL3_GYR1_X -96.827885
+INS_TCAL3_GYR1_Y 75.113397
+INS_TCAL3_GYR1_Z -5.26764
+INS_TCAL3_GYR2_X 2.223648
+INS_TCAL3_GYR2_Y -1.217539
+INS_TCAL3_GYR2_Z -0.089058
+INS_TCAL3_GYR3_X 0.053099
+INS_TCAL3_GYR3_Y -0.019702
+INS_TCAL3_GYR3_Z -0.00929
+INS_TCAL3_TMAX 52.7
+INS_TCAL3_TMIN -6.6
+
+#---BASICS
+BRD_TYPE 3             # Cube Board
+BRD_PWM_VOLT_SEL 1     # Voltage max for PWM output pulses 5V
+BRD_SAFETY_DEFLT 0     # Default state of safety switch at boot (Disabled) Not implemented switch
+BRD_HEAT_TARG 45       # Target board temperature [°C]
+FRAME_CLASS 4          # OctaQuad configuration
+FRAME_TYPE 1           # X configuration
+AHRS_ORIENTATION 0     # Board orientation (Level orientation)
+ARMING_CHECK 982527    # BitMask for arming check
+LOG_BITMASK 180223     # Enable differents features to be saved in the log
+LOG_DISARMED 0         # Enable Log Disarmed
+NTF_LED_TYPES 33       # Types of LEDs will be enabled (Built-in LED,DroneCAN)
+
+#---SERIAL
+SERIAL_PASS1 0         # Serial pass-through first port selection
+SERIAL_PASS2 -1        # Serial pass-through second port selection
+
+#---ADS-B
+ADSB_TYPE 1            # ADSB Type (uAvionix-MAVLink)
+SERIAL5_BAUD 57        # Baudrate
+SERIAL5_OPTIONS 0      # Non Option necesary
+SERIAL5_PROTOCOL 2     # Protocol type: MAVLink2
+SR0_ADSB 2             # Set ADSB stream rate to ground station
+SR1_ADSB 2             # Enables the ground station to receive the detected aircraft information
+
+#---EXTRAS
+TERRAIN_ENABLE 0       # Enables the vehicle storing a database of terrain data (Disable)
+
+#---CAN CONFIG
+CAN_SLCAN_CPORT 0      # CAN Interface ID to be routed to SLCAN
+CAN_D1_UC_NODE 10      # DroneCAN node ID used by the driver itself on the network
+CAN_P1_DRIVER 1        # Index of virtual driver to be used with physical CAN interface
+CAN_D1_PROTOCOL 1      # Protocol for CAN driver 1 (DroneCAN)
+CAN_P2_DRIVER 2        # Index of virtual driver to be used with physical CAN interface
+CAN_D2_PROTOCOL 1      # Protocol for CAN driver 2 (DroneCAN)
+
+#---FLIGHT MODES
+FLTMODE_CH 0           # RC channel for flight mode switching (0 = disabled, GCS/companion only)
+PILOT_TKOFF_ALT 100    # Default pilot takeoff altitude [cm]
+INITIAL_MODE 5         # Initial flight mode at startup (LOITER)
+ANGLE_MAX 3000         # Maximum lean angle in all flight modes [centidegrees]
+LAND_SPEED_HIGH 150    # The descent speed for the first stage of landing [cm/s]
+GUID_TIMEOUT 10        # Time for guided commands to wait before timing out [s]
+#------RTL
+RTL_ALT 1500           # Target altitude during RTL [cm]
+RTL_SPEED 800          # Horizontal speed during RTL [cm/s]
+#------LOIT
+LOIT_ANG_MAX 25        # Maximum lean angle (degrees) allowed in Loiter
+LOIT_BRK_ACCEL 250     # Braking acceleration when stopping in Loiter (cm/s²)
+LOIT_BRK_DELAY 0.5     # Delay before braking begins when sticks are released (seconds)
+LOIT_BRK_JERK 500      # Maximum rate of change of braking acceleration (cm/s³)
+LOIT_SPEED 1250        # Maximum horizontal speed in Loiter (cm/s)
+LOIT_ACC_MAX 600       # Maximum horizontal acceleration in Loiter (cm/s²)
+
+#---DID
+DID_ENABLE 1           # Enable Drone ID
+DID_MAVPORT -1         # Serial port number to send OpenDroneID (Disable)
+DID_OPTIONS 0          # Options (EnforceArming)
+DID_CANDRIVER 2        # Enable Drone ID via DroneCAN
+DID_BARO_ACC -1        # Disable Baro
+
+#---SCRIPT
+SCR_ENABLE 1           # Enable Lua Scripts
+
+#---FAILSAFE
+FS_OPTIONS 3            # Failsafe options (Continue if in auto on RC and GCS failsafe)
+FS_GCS_ENABLE 0         # Ground Control Station failsafe (Disabled)
+FS_EKF_ACTION 2         # If it loses reliable attitude/position estimation failsafe action (AltHold)
+FS_THR_VALUE 910        # PWM level on channel 3 below which throttle failsafe triggers [PWM µs]
+FS_THR_ENABLE 1         # Throttle Failsafe Enable, Enabled always RTL
+BATT_FS_LOW_ACT 2       # Low battery failsafe action (RTL)
+BATT2_FS_LOW_ACT 2      # Low battery failsafe action (RTL)
+BATT_FS_CRT_ACT 1       # Critical battery failsafe action (Land)
+BATT2_FS_CRT_ACT 1      # Critical battery failsafe action (Land)
+
+#---HERELINK CAMERA
+SERVO13_FUNCTION 56    # Controls RCIN6
+SERVO13_MAX 1900       # Maximum PWM
+SERVO13_MIN 1100       # Minimum PWM
+SERVO13_TRIM 1500      # Neutral / center position
+SERVO13_REVERSED 0     # Normal direction
+
+#----PARACHUTE
+SERIAL3_BAUD 115       # Baudrate
+SERIAL3_OPTIONS 0      # Non Option related
+SERIAL3_PROTOCOL 2     # MAVLink2
+
+#---GREMSY GIMBAL
+MNT1_TYPE 6             # Gremmsy Mount type
+MNT1_DEFLT_MODE 2       # Mavlink Targeting
+SERIAL4_BAUD 115        # Baudrate
+SERIAL4_OPTIONS 1024    # Bitmask for gremsy
+SERIAL4_PROTOCOL 2      # Mavlink2 Protocol
+
+#---MJOLNIR
+RELAY1_PIN 55           # AUXOUT6
+SERVO14_FUNCTION -1     # GPIO
+RELAY1_FUNCTION 4       # CAMERA
+
+#---CAMERA
+CAM1_TYPE 2             # Camera type: Servo-triggered camera
+CAM1_DURATION 1         # Trigger pulse duration in seconds
+CAM1_FEEDBAK_PIN -1     # No feedback pin used
+CAM1_FEEDBAK_POL 1      # Feedback polarity (active high, unused if pin = -1)
+CAM1_HFOV 0             # Camera horizontal field of view (0 = not set)
+CAM1_INTRVAL_MIN 0      # Minimum time between triggers (0 = disabled)
+CAM1_MNT_INST 0         # Associated mount instance (0 = Mount1)
+CAM1_OPTIONS 0          # Camera options bitmask (none enabled)
+CAM1_RELAY_ON 1         # Relay number used to trigger camera (Relay1)
+CAM1_SERVO_OFF 1100     # Servo PWM when camera trigger is OFF
+CAM1_SERVO_ON 1900      # Servo PWM when camera trigger is ON
+CAM1_TRIGG_DIST 0       # Distance-based triggering disabled
+
+#---RC
+ARMING_RUDDER 2        # Allow arm/disarm by rudder input.
+RC_OPTIONS 32          # Arming check throttle for 0 input.
+RC_OVERRIDE_TIME 3     # Default How long ArduPilot obeys external RC commands sent by a computer.
+RC_PROTOCOLS 1         # PPM Enable
+RC_SPEED 490           # Default Max How many times per second the flight controller updates the ESCs with new motor commands.
+RCMAP_PITCH 2          # Pitch channel.
+RCMAP_ROLL 1           # Roll channel.
+RCMAP_THROTTLE 3       # Throttle channel.
+RCMAP_YAW 4            # Yaw channel.
+RSSI_TYPE 0            # Radio without RSSI.
+
+#-----Telemetry RFD OR DOODLE
+SERIAL1_BAUD 57        # Baudrate
+SERIAL1_OPTIONS 0      # Non Option related
+SERIAL1_PROTOCOL 2     # Protocol type: MAVLink2 (RFD DID WORKS)
+
+#----Telemetry HL
+SERIAL2_BAUD 115       # Baudrate
+SERIAL2_OPTIONS 0      # Non Option related
+SERIAL2_PROTOCOL 2     # Protocol type: MAVLink2
+
+#---MOTORS - TMotor MN8017 KV120 / V120A CAN ESC / 32" propellers
+ESC_HW_POLES 42        # TMotor MN8017: 36N42P = 42 magnetic poles
+SERVO_BLG_POLES 42     # TMotor MN8017: 36N42P = 42 magnetic poles
+SERVO_FTW_POLES 42     # TMotor MN8017: 36N42P = 42 magnetic poles
+MOT_THST_EXPO 0.78     # Mission Planner Initial Parameters (32" prop, OctaQuad X)
+MOT_THST_HOVER 0.2     # Mission Planner estimate – auto-learned after first ALTHOLD hover
+MOT_YAW_HEADROOM 200   # Minimum PWM range for yaw control [PWM]
+SERVO1_FUNCTION 33     # Controls Motor1 output
+SERVO1_MAX 1940        # TMotor V120A ESC spec
+SERVO1_MIN 1040        # TMotor V120A ESC spec (range: 1040-1940)
+SERVO1_TRIM 1490       # TMotor V120A ESC spec
+SERVO2_FUNCTION 34     # Controls Motor2 output
+SERVO2_MAX 1940        # TMotor V120A ESC spec
+SERVO2_MIN 1040        # TMotor V120A ESC spec
+SERVO2_TRIM 1490       # TMotor V120A ESC spec
+SERVO3_FUNCTION 35     # Controls Motor3 output
+SERVO3_MAX 1940        # TMotor V120A ESC spec
+SERVO3_MIN 1040        # TMotor V120A ESC spec
+SERVO3_TRIM 1490       # TMotor V120A ESC spec
+SERVO4_FUNCTION 36     # Controls Motor4 output
+SERVO4_MAX 1940        # TMotor V120A ESC spec
+SERVO4_MIN 1040        # TMotor V120A ESC spec
+SERVO4_TRIM 1490       # TMotor V120A ESC spec
+SERVO5_FUNCTION 37     # Controls Motor5 output
+SERVO5_MAX 1940        # TMotor V120A ESC spec
+SERVO5_MIN 1040        # TMotor V120A ESC spec
+SERVO5_TRIM 1490       # TMotor V120A ESC spec
+SERVO6_FUNCTION 38     # Controls Motor6 output
+SERVO6_MAX 1940        # TMotor V120A ESC spec
+SERVO6_MIN 1040        # TMotor V120A ESC spec
+SERVO6_TRIM 1490       # TMotor V120A ESC spec
+SERVO7_FUNCTION 39     # Controls Motor7 output
+SERVO7_MAX 1940        # TMotor V120A ESC spec
+SERVO7_MIN 1040        # TMotor V120A ESC spec
+SERVO7_TRIM 1490       # TMotor V120A ESC spec
+SERVO8_FUNCTION 40     # Controls Motor8 output
+SERVO8_MAX 1940        # TMotor V120A ESC spec
+SERVO8_MIN 1040        # TMotor V120A ESC spec
+SERVO8_TRIM 1490       # TMotor V120A ESC spec
+MOT_PWM_TYPE 0         # Standard PWM type (Normal) – required even with CAN ESCs
+MOT_PWM_MAX 1940       # TMotor V120A ESC spec
+MOT_PWM_MIN 1040       # TMotor V120A ESC spec
+MOT_SPIN_ARM 0.12      # Starting value – verify with bench motor test
+MOT_SPIN_MIN 0.15      # Starting value – verify with bench motor test
+MOT_BAT_VOLT_MAX 52.2  # Maximum voltage for thrust scaling [V] (HV 12S LiPo)
+MOT_BAT_VOLT_MIN 39.6  # Minimum voltage for thrust scaling [V] (12S x 3.3V)
+MOT_SPOOL_TIME 1       # https://discuss.cubepilot.org/t/auto-mode-change-the-initial-spool-up-take-off-speed/1247
+TKOFF_RPM_MIN 0        # Disable check-RPM MIN to Takeoff
+TKOFF_SLEW_TIME 5      # https://discuss.ardupilot.org/t/feedback-and-assistance-with-new-takeoff-behaviour/94121/3
+#---CAN ESC
+CAN_D1_UC_ESC_BM 255   # Bitmask: all 8 motors (motors 1-8) sent via DroneCAN on bus 1
+
+#1
+BATT_MONITOR 8         # Battery monitoring type DroneCAN-BatteryInfo
+BATT_SERIAL_NUM 1      # Battery identifier
+BATT_ARM_VOLT 46       # Minimum voltage required for arming [V]
+BATT_CAPACITY 25000    # Battery capacity [mAh]
+BATT_LOW_VOLT 43.5     # Low battery voltage warning threshold [V]
+BATT_LOW_MAH 0         # Low battery capacity warning threshold [mAh] (Disabled)
+BATT_CRT_VOLT 42       # Critical battery voltage threshold [V]
+BATT_CRT_MAH 0         # Critical battery capacity threshold [mAh] (Disabled)
+BATT_OPTIONS 1         # Report MPTT Voltage and current
+#2
+BATT2_MONITOR 8        # Battery monitoring type (Analog Voltage and Current)
+BATT2_SERIAL_NUM 2     # Battery identifier
+BATT2_ARM_VOLT 46      # Minimum voltage required for arming [V]
+BATT2_CAPACITY 25000   # Battery capacity [mAh]
+BATT2_LOW_VOLT 43.5    # Low battery voltage warning threshold [V]
+BATT2_LOW_MAH 0        # Low battery capacity warning threshold [mAh] (Disabled)
+BATT2_CRT_VOLT 42      # Critical battery voltage threshold [V]
+BATT2_CRT_MAH 0        # Critical battery capacity threshold [mAh] (Disabled)
+BATT2_OPTIONS 1        # Report MPTT Voltage and current
+
+
+#---GPS MOVING BASELINE
+GPS_AUTO_CONFIG 2      # Enable automatic configuration for GPS (DroneCAN GPS)
+GPS1_TYPE 22           # GPS CAN Base
+GPS2_TYPE 23           # GPS CAN Rover
+GPS_AUTO_SWITCH 1      # Use Best
+GPS1_CAN_OVRIDE 21     # GPS1 CAN ID
+GPS2_CAN_OVRIDE 22     # GPS2 CAN ID
+GPS1_POS_X 0           # Position
+GPS1_POS_Y 0.253       # Position
+GPS1_POS_Z -0.141      # Position
+GPS2_POS_X 0           # Position
+GPS2_POS_Y -0.253      # Position
+GPS2_POS_Z -0.141      # Position
+GPS_SBAS_MODE 0        # SBAS (Satellite-Based Augmentation System) disabled
+GPS1_GNSS_MODE 5       # GNSS constellation bitmask: GPS (bit0) + Galileo (bit2) = 5
+GPS2_GNSS_MODE 5       # GNSS constellation bitmask: GPS (bit0) + Galileo (bit2) = 5
+
+#---NAVIGATION IMU
+EK3_IMU_MASK 7          # Bitmask for IMU sensors used by EKF3 (7 = use IMU1, IMU2, IMU3)
+EK3_SRC1_POSZ 3         # Primary source for vertical position (3 = GPS)
+AHRS_EKF_TYPE 3         # EKF type selection (3 = EKF3)
+EK3_ENABLE 1            # Enable EKF3 estimator
+EK3_MAG_CAL 3           # Magnetometer calibration mode (3 = automatic on all compasses)
+EK3_SRC1_YAW 3          # Primary yaw source (GPS yaw with compass fallback)
+EK3_SRC2_YAW 0          # Secondary yaw source (disabled / none)
+EK3_AFFINITY 6          # EKF core affinity assignment for sensors (barometer & compass)
+WP_NAVALT_MIN 0.5       # Minimum altitude above home for waypoint navigation [meters]
+WP_YAW_BEHAVIOR 1       # Vehicle yaw behavior during waypoint flight and RTL (e.g. face next waypoint)
+WPNAV_SPEED 800         # Default horizontal waypoint navigation speed [cm/s]
+WPNAV_SPEED_DN 150      # Maximum descent speed during waypoint navigation [cm/s]
+WPNAV_SPEED_UP 200      # Maximum ascent speed during waypoint navigation [cm/s]
+WPNAV_ACCEL 100         # Horizontal acceleration limit during waypoint navigation [cm/s²]
+WPNAV_ACCEL_C 0         # Horizontal acceleration used while cornering between waypoints [cm/s²]
+WPNAV_ACCEL_Z 100       # Vertical acceleration limit during waypoint navigation [cm/s²]
+WPNAV_JERK 1            # Maximum jerk (rate of acceleration change) during navigation [m/s³]
+WPNAV_RADIUS 400        # Acceptance radius for reaching a waypoint [cm]
+WPNAV_RFND_USE 1        # Enable rangefinder-based terrain following during navigation
+WPNAV_TER_MARGIN 10     # Allowed altitude error before stopping during terrain following [meters]
+
+#---FENCE Geofencing system
+FENCE_ENABLE 0          # Enable geofencing system (0 = disabled, 1 = enabled)
+FENCE_ACTION 1          # Action taken on fence breach (1 = RTL)
+FENCE_ALT_MAX 100       # Maximum allowed altitude above home before fence breach [meters]
+FENCE_ALT_MIN -10       # Minimum allowed altitude relative to home before fence breach [meters]
+FENCE_MARGIN 2          # Safety margin inside the fence before breach is triggered [meters]
+FENCE_RADIUS 300       # Radius of circular geofence centered on home position [meters]
+FENCE_TOTAL 0           # Number of polygon fence points defined (0 = no polygon fence)
+FENCE_TYPE 3            # Fence type bitmask (3 = Max altitude + Circular fence enabled)
+
+#---ATC Attitude Control (Angle & Rate Controllers)
+# NOTE: Values from Mission Planner Initial Parameters (32" prop, OctaQuad X, MN8017/V120A)
+ATC_ACCEL_P_MAX 19100     # Maximum pitch angular acceleration [deg/s²]
+ATC_ACCEL_R_MAX 19100     # Maximum roll angular acceleration [deg/s²]
+ATC_ACCEL_Y_MAX 8000      # Maximum yaw angular acceleration [deg/s²]
+
+ATC_ANG_LIM_TC 0.5        # Time constant for smoothing attitude angle limits [seconds]
+ATC_ANG_PIT_P 4.5         # Pitch angle controller proportional gain
+ATC_ANG_RLL_P 4.5         # Roll angle controller proportional gain
+ATC_ANG_YAW_P 4.5         # Yaw angle controller proportional gain
+
+ATC_ANGLE_BOOST 1         # Enable throttle boost based on vehicle lean angle
+ATC_INPUT_TC 0.2          # Pilot input smoothing time constant [seconds]
+
+ATC_RAT_PIT_D 0.002       # Pitch rate controller derivative gain
+ATC_RAT_PIT_D_FF 0        # Pitch rate derivative feedforward gain
+ATC_RAT_PIT_FF 0          # Pitch rate feedforward gain
+ATC_RAT_PIT_FLTD 10       # Pitch rate D-term low-pass filter cutoff [Hz]
+ATC_RAT_PIT_FLTE 0        # Pitch rate error filter cutoff [Hz]
+ATC_RAT_PIT_FLTT 10       # Pitch rate target filter cutoff [Hz]
+ATC_RAT_PIT_I 0.08        # Pitch rate controller integral gain
+ATC_RAT_PIT_IMAX 0.5      # Maximum pitch rate integrator output
+ATC_RAT_PIT_NEF 0         # Pitch rate notch enable frequency (0 = disabled)
+ATC_RAT_PIT_NTF 0         # Pitch rate notch tracking frequency (0 = disabled)
+ATC_RAT_PIT_P 0.08        # Pitch rate controller proportional gain
+ATC_RAT_PIT_PDMX 0        # Pitch rate PD mix (0 = disabled)
+ATC_RAT_PIT_SMAX 0        # Pitch rate output slew limit (0 = unlimited)
+
+ATC_RAT_RLL_D 0.002       # Roll rate controller derivative gain
+ATC_RAT_RLL_D_FF 0        # Roll rate derivative feedforward gain
+ATC_RAT_RLL_FF 0          # Roll rate feedforward gain
+ATC_RAT_RLL_FLTD 10       # Roll rate D-term low-pass filter cutoff [Hz]
+ATC_RAT_RLL_FLTE 0        # Roll rate error filter cutoff [Hz]
+ATC_RAT_RLL_FLTT 10       # Roll rate target filter cutoff [Hz]
+ATC_RAT_RLL_I 0.08        # Roll rate controller integral gain
+ATC_RAT_RLL_IMAX 0.5      # Maximum roll rate integrator output
+ATC_RAT_RLL_NEF 0         # Roll rate notch enable frequency (0 = disabled)
+ATC_RAT_RLL_NTF 0         # Roll rate notch tracking frequency (0 = disabled)
+ATC_RAT_RLL_P 0.08        # Roll rate controller proportional gain
+ATC_RAT_RLL_PDMX 0        # Roll rate PD mix (0 = disabled)
+ATC_RAT_RLL_SMAX 0        # Roll rate output slew limit (0 = unlimited)
+
+ATC_RAT_YAW_D 0           # Yaw rate controller derivative gain
+ATC_RAT_YAW_D_FF 0        # Yaw rate derivative feedforward gain
+ATC_RAT_YAW_FF 0          # Yaw rate feedforward gain
+ATC_RAT_YAW_FLTD 0        # Yaw rate D-term low-pass filter cutoff [Hz]
+ATC_RAT_YAW_FLTE 2        # Yaw rate error filter cutoff [Hz]
+ATC_RAT_YAW_FLTT 10       # Yaw rate target filter cutoff [Hz]
+ATC_RAT_YAW_I 0.05        # Yaw rate controller integral gain
+ATC_RAT_YAW_IMAX 0.5      # Maximum yaw rate integrator output
+ATC_RAT_YAW_NEF 0         # Yaw rate notch enable frequency (0 = disabled)
+ATC_RAT_YAW_NTF 0         # Yaw rate notch tracking frequency (0 = disabled)
+ATC_RAT_YAW_P 0.5         # Yaw rate controller proportional gain
+ATC_RAT_YAW_PDMX 0        # Yaw rate PD mix (0 = disabled)
+ATC_RAT_YAW_SMAX 0        # Yaw rate output slew limit (0 = unlimited)
+
+ATC_RATE_FF_ENAB 1        # Enable rate feedforward control
+ATC_RATE_P_MAX 0          # Maximum pitch rate [deg/s] (0 = use default)
+ATC_RATE_R_MAX 0          # Maximum roll rate [deg/s] (0 = use default)
+ATC_RATE_Y_MAX 0          # Maximum yaw rate [deg/s] (0 = use default)
+
+ATC_SLEW_YAW 3000         # Maximum yaw slew rate during heading changes [deg/s²]
+ATC_THR_G_BOOST 0         # Throttle boost based on vertical acceleration (disabled)
+ATC_THR_MIX_MAN 0.1       # Manual throttle mixing factor
+ATC_THR_MIX_MAX 0.5       # Maximum throttle mixing value
+ATC_THR_MIX_MIN 0.1       # Minimum throttle mixing value
+
+#---PSC Proportional, Integral, and Derivative Controller (Position / Velocity / Acceleration)
+PSC_ACCZ_D 0              # Vertical acceleration derivative gain
+PSC_ACCZ_D_FF 0           # Vertical acceleration derivative feedforward gain
+PSC_ACCZ_FF 0             # Vertical acceleration feedforward gain
+PSC_ACCZ_FLTD 10          # Vertical acceleration D-term filter cutoff [Hz]
+PSC_ACCZ_FLTE 0           # Vertical acceleration error filter cutoff [Hz]
+PSC_ACCZ_FLTT 10          # Vertical acceleration target filter cutoff [Hz]
+PSC_ACCZ_I 0.4            # Vertical acceleration integral gain
+PSC_ACCZ_IMAX 800         # Maximum vertical acceleration integrator output
+PSC_ACCZ_NEF 0            # Vertical acceleration notch enable frequency (disabled)
+PSC_ACCZ_NTF 0            # Vertical acceleration notch tracking frequency (disabled)
+PSC_ACCZ_P 0.2            # Vertical acceleration proportional gain
+PSC_ACCZ_PDMX 0           # Vertical acceleration PD mix
+PSC_ACCZ_SMAX 0           # Vertical acceleration slew limit
+
+PSC_ANGLE_MAX 0           # Maximum tilt angle from position controller (0 = use default)
+PSC_JERK_XY 5             # Maximum horizontal jerk [m/s³]
+PSC_JERK_Z 5              # Maximum vertical jerk [m/s³]
+
+PSC_POSXY_P 0.1           # Horizontal position proportional gain
+PSC_POSZ_P 1              # Vertical position proportional gain
+
+PSC_VELXY_D 0.05          # Horizontal velocity derivative gain
+PSC_VELXY_FF 0            # Horizontal velocity feedforward gain
+PSC_VELXY_FLTD 1.5        # Horizontal velocity D-term filter cutoff [Hz]
+PSC_VELXY_FLTE 1.5        # Horizontal velocity error filter cutoff [Hz]
+PSC_VELXY_I 0.4           # Horizontal velocity integral gain
+PSC_VELXY_IMAX 1000       # Maximum horizontal velocity integrator output
+PSC_VELXY_P 0.75          # Horizontal velocity proportional gain
+
+PSC_VELZ_D 0              # Vertical velocity derivative gain
+PSC_VELZ_FF 0             # Vertical velocity feedforward gain
+PSC_VELZ_FLTD 5           # Vertical velocity D-term filter cutoff [Hz]
+PSC_VELZ_FLTE 5           # Vertical velocity error filter cutoff [Hz]
+PSC_VELZ_I 0              # Vertical velocity integral gain
+PSC_VELZ_IMAX 1000        # Maximum vertical velocity integrator output
+PSC_VELZ_P 5              # Vertical velocity proportional gain
+
+#---NOTCH FILTER High-pass notch filter for the IMU
+# NOTE: Conservative starting values for new powerplant – update after first flight log analysis
+INS_HNTCH_ENABLE 1        # Enable harmonic notch filtering
+INS_HNTCH_FM_RAT 0.75     # Frequency multiplier for throttle-based notch tracking
+INS_HNTCH_ATT 40          # Attenuation level of the notch filter [dB] – raise after log review
+INS_HNTCH_BW 15           # Notch filter bandwidth [Hz] – widen after log review
+INS_HNTCH_FREQ 31         # Base notch center frequency [Hz] – estimated from 32" prop hover RPM (~1875 RPM)
+INS_HNTCH_HMNCS 3         # Harmonics bitmask: 1st + 2nd only (sufficient for 32" props)
+INS_HNTCH_MODE 1          # Harmonic notch mode (1 = throttle-based)
+INS_HNTCH_OPTS 16         # Harmonic notch options bitmask (double-notch)
+INS_HNTCH_REF 0.2         # Reference throttle – update to MOT_THST_HOVER after first hover
+INS_GYRO_FILTER 20        # Gyroscope low-pass filter cutoff frequency [Hz]
+INS_ACCEL_FILTER 10       # Accelerometer low-pass filter cutoff frequency [Hz]

@@ -3,9 +3,12 @@
 #include <AP_Logger/LogStructure.h>
 #include "LogStructure_SBP.h"
 
+// BS-COMMENT[GPS-LOG]: Added LOG_GPTH_MSG to expose GPS CAN-bus timing health fields (delayed_count, average_delta_ms, lagged_sample_count) in logs
 #define LOG_IDS_FROM_GPS                        \
     LOG_GPS_MSG,                                \
     LOG_GPA_MSG,                                \
+    /* BS-COMMENT[GPS-LOG]: GPTH disabled */ \
+    /* LOG_GPTH_MSG, */                         \
     LOG_GPS_RAW_MSG,                            \
     LOG_GPS_RAWH_MSG,                           \
     LOG_GPS_RAWS_MSG,                           \
@@ -82,6 +85,28 @@ struct PACKED log_GPA {
     uint16_t rtcm_fragments_used;
     uint16_t rtcm_fragments_discarded;
 };
+
+#if 0
+// BS-COMMENT[GPS-LOG]: GPTH struct enabled - change #if 1 to #if 0 to disable
+// BS-COMMENT[GPS-LOG]: New GPTH struct to log GPS timing health data for diagnosing CAN-bus packet delays.
+// Fields: delayed_count (frames delayed beyond threshold), average_delta_ms (rolling avg update rate),
+// lagged_sample_count (samples with >50ms extra lag). Mirrors the delay_ok check in AP_GPS::is_healthy().
+// @LoggerMessage: GPTH
+// @Description: GPS timing health diagnostics (CAN-bus delay monitoring)
+// @Field: TimeUS: Time since system startup
+// @Field: I: GPS instance number
+// @Field: DlyC: Count of delayed GPS frames (threshold is 2 before unhealthy)
+// @Field: AvgDlt: Rolling average GPS update delta in milliseconds (limit 215ms normal, 333ms RTK rover)
+// @Field: LagCnt: Cumulative count of samples with more than 50ms additional lag
+struct PACKED log_GPTH {
+    LOG_PACKET_HEADER;
+    uint64_t time_us;
+    uint8_t  instance;
+    uint8_t  delayed_count;
+    float    average_delta_ms;
+    uint32_t lagged_sample_count;
+};
+#endif // BS-COMMENT[GPS-LOG]: GPTH disabled
 
 /*
   UBlox logging
@@ -208,6 +233,9 @@ struct PACKED log_GPS_RAWS {
       "GPS",  "QBBIHBcLLeffffB", "TimeUS,I,Status,GMS,GWk,NSats,HDop,Lat,Lng,Alt,Spd,GCrs,VZ,Yaw,U", "s#-s-S-DUmnhnh-", "F--C-0BGGB000--" , true }, \
     { LOG_GPA_MSG,  sizeof(log_GPA), \
       "GPA",  "QBCCCCfBIHeHH", "TimeUS,I,VDop,HAcc,VAcc,SAcc,YAcc,VV,SMS,Delta,AEl,RTCMFU,RTCMFD", "s#-mmnd-ssm--", "F-BBBB0-CCB--" , true }, \
+    /* BS-COMMENT[GPS-LOG]: GPTH entry disabled */ \
+    /* { LOG_GPTH_MSG, sizeof(log_GPTH), \
+      "GPTH", "QBBfI", "TimeUS,I,DlyC,AvgDlt,LagCnt", "s#---", "F----", true }, */ \
     { LOG_GPS_UBX1_MSG, sizeof(log_Ubx1), \
       "UBX1", "QBHBBHI",  "TimeUS,Instance,noisePerMS,jamInd,aPower,agcCnt,config", "s#-----", "F------"  , true }, \
     { LOG_GPS_UBX2_MSG, sizeof(log_Ubx2), \
