@@ -56,6 +56,7 @@
 #define ODID_MAX_AREA_RADIUS 2550
 #define ODID_AREA_COUNT_MIN  1
 #define ODID_AREA_COUNT_MAX  65000
+#define ODID_MIN_GROUND_SPEED 0.3f  //BS-COMMENT[DID-DIRECTION] Minimum ground speed to send direction
 
 class AP_DroneCAN;
 
@@ -129,8 +130,9 @@ private:
     uint32_t _last_send_location_ms;
     uint32_t _last_send_system_update_ms;
     uint32_t _last_send_static_messages_ms;
-    const uint32_t _mavlink_dynamic_period_ms = 1000; //how often are mavlink dynamic messages sent in ms. E.g. 1000 = 1 Hz
-    const uint32_t _mavlink_static_period_ms = 3000; //how often are mavlink static messages sent in ms
+    //BS-COMMENT[DID-RATE] MAVLINK MESSAGE SPEED
+    const uint32_t _mavlink_dynamic_period_ms = 500; //how often are mavlink dynamic messages sent in ms. E.g. 500 = 2 Hz
+    const uint32_t _mavlink_static_period_ms = 500; //how often are mavlink static messages sent in ms  E.g. 500 = 2 Hz
 
     bool     _have_height_above_takeoff;
     Location _takeoff_location;

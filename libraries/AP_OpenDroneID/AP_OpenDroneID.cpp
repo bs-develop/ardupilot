@@ -38,8 +38,10 @@
 #include <AP_Baro/AP_Baro.h>
 #include <AP_AHRS/AP_AHRS.h>
 #include <AP_Parachute/AP_Parachute.h>
+#include <AP_BattMonitor/AP_BattMonitor.h>
 #include <AP_Vehicle/AP_Vehicle.h>
 #include <AP_DroneCAN/AP_DroneCAN.h>
+#include <RC_Channel/RC_Channel.h>
 #include <stdio.h>
 #include <GCS_MAVLink/GCS.h>
 
@@ -209,6 +211,8 @@ void AP_OpenDroneID::update()
     if (_enable == 0) {
         return;
     }
+    // BS-COMMENT[DID-EU-CLASS]: Send EU classification type
+    pkt_system.classification_type = MAV_ODID_CLASSIFICATION_TYPE_EU;
 
     if ((pkt_basic_id.id_type == MAV_ODID_ID_TYPE_SERIAL_NUMBER)
         && (_options & LockUASIDOnFirstBasicIDRx)
@@ -287,7 +291,8 @@ void AP_OpenDroneID::send_static_out()
     // we need to notify user if we lost system msg with operator location
     if (now_ms - last_system_ms > 5000 && now_ms - last_lost_operator_msg_ms > 5000) {
         last_lost_operator_msg_ms = now_ms;
-        GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "ODID: lost operator location");
+        //BS-COMMENT[DID-OP-LOC] warning suppressed - operator location provided via takeoff GPS fallback
+        //GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "ODID: lost operator location");
     }
     
     const uint32_t msg_spacing_ms = _mavlink_static_period_ms / 4;
@@ -348,23 +353,46 @@ void AP_OpenDroneID::send_location_message()
         return;
     }
     uint8_t uav_status = hal.util->get_soft_armed()? MAV_ODID_STATUS_AIRBORNE : MAV_ODID_STATUS_GROUND;
+    // BS-COMMENT[DID-EMERGENCY] set emergency status if chute is released
 #if HAL_PARACHUTE_ENABLED
-    // set emergency status if chute is released
     const auto *parachute = AP::parachute();
     if (parachute != nullptr && parachute->released()) {
         uav_status = MAV_ODID_STATUS_EMERGENCY;
     }
 #endif
+    // BS-COMMENT[DID-EMERGENCY] if in crashed state also declare an emergency
     if (AP::vehicle()->is_crashed()) {
-        // if in crashed state also declare an emergency
         uav_status = MAV_ODID_STATUS_EMERGENCY;
     }
 
-    // if we are armed with no GPS fix and we haven't specifically
+    // BS-COMMENT[DID-EMERGENCY] if we are armed with no GPS fix and we haven't specifically
     // allowed for non-GPS operation then declare an emergency
     if (got_bad_gps_fix && armed && !option_enabled(Options::AllowNonGPSPosition)) {
         uav_status = MAV_ODID_STATUS_EMERGENCY;
     }
+
+#if 1
+// BS-COMMENT[DID-EMERGENCY]: Custom emergency conditions - change #if 1 to #if 0 to disable
+    // BS-COMMENT[DID-EMERGENCY] if we are armed and flight mode is althold then we have an emergency
+    if (armed && AP::vehicle()->get_mode() == 2) {      // Magic number for ALT_HOLD ! This is only valid for Copter
+        uav_status = MAV_ODID_STATUS_EMERGENCY;
+    }
+    // BS-COMMENT[DID-EMERGENCY] if we are armed and battery failsafe is triggered then we have an emergency
+    const AP_BattMonitor &_battery = AP::battery();
+    const bool battery_failsafed = _battery.has_failsafed();
+    if (armed && battery_failsafed) {
+        uav_status = MAV_ODID_STATUS_EMERGENCY;
+    }
+    // BS-COMMENT[DID-EMERGENCY] If there is no RC signal
+    if (armed && !rc().has_valid_input()) {
+        uav_status = MAV_ODID_STATUS_EMERGENCY;
+    }
+    // BS-COMMENT[DID-EMERGENCY] If there is no GCS signal
+    const uint32_t now_ms = AP_HAL::millis();
+    if (now_ms - last_system_update_ms > 5000) {
+        uav_status = MAV_ODID_STATUS_EMERGENCY;
+    }
+#endif // BS-COMMENT[DID-EMERGENCY]: enabled
 
     // if we are disarmed and falling at over 3m/s then declare an
     // emergency. This covers cases such as deliberate crash with
@@ -379,7 +407,9 @@ void AP_OpenDroneID::send_location_message()
     }
 
     float direction = ODID_INV_DIR;
-    if (!got_bad_gps_fix) {
+    //BS-COMMENT[DID-DIRECTION] send direction when the drone is moving a bigger speed that the threshold
+    float ground_speed_magnitude = ahrs.groundspeed_vector().length();
+    if (!got_bad_gps_fix and ground_speed_magnitude > ODID_MIN_GROUND_SPEED) {
         direction = wrap_360(degrees(ahrs.groundspeed_vector().angle())); // heading (degrees)
     }
 
@@ -462,7 +492,8 @@ void AP_OpenDroneID::send_location_message()
     float timestamp = ODID_INV_TIMESTAMP;
     if (!got_bad_gps_fix) {
         uint32_t time_week_ms = gps.time_week_ms();
-        timestamp = float(time_week_ms % (3600 * 1000)) * 0.001;
+        //BS-COMMENT[DID-UTC] CHANGE TO UTC
+        timestamp = float(time_week_ms % (3600 * 1000)) * 0.001 - 18;
         timestamp = create_location_timestamp(timestamp);   //make sure timestamp is within Remote ID limit
     }
 
@@ -525,16 +556,51 @@ void AP_OpenDroneID::send_self_id_message()
     }
 }
 
+//BS-COMMENT[DID-TAKEOFF-LOC] Update to send Take Off Location
 void AP_OpenDroneID::send_system_update_message()
 {
     need_send_system |= dronecan_send_all;
-    // note that packet is filled in by the GCS
+
+    // Default values (use drone location or fallback to zero)
+    int32_t op_lat = 0;
+    int32_t op_lon = 0;
+    float op_alt_geo = 0.0f;
+    uint32_t timestamp = 0;
+
+    // Force use current drone location as operator location
+    if (_takeoff_location.check_latlng() and pkt_system.operator_location_type == 0) {
+        op_lat = _takeoff_location.lat;
+        op_lon = _takeoff_location.lng;
+
+        // Get current altitude in geodetic format
+        int32_t alt_amsl_cm;
+        if (_takeoff_location.get_alt_cm(Location::AltFrame::ABSOLUTE, alt_amsl_cm)) {
+            op_alt_geo = alt_amsl_cm * 0.01; // convert cm to meters
+
+            // Subtract undulation to get geodetic altitude
+            const auto &gps = AP::gps();
+            float undulation;
+            if (gps.get_undulation(undulation)) {
+                op_alt_geo -= undulation;
+            }
+        }
+
+        const auto &gps = AP::gps();
+        if (gps.status() >= AP_GPS::GPS_Status::GPS_OK_FIX_3D) {
+            uint32_t time_week_ms = gps.time_week_ms();
+            timestamp = float(time_week_ms % (3600 * 1000)) * 0.001 + 18; // seconds in current hour
+        }
+    }
+    pkt_system.operator_latitude = op_lat;
+    pkt_system.operator_longitude = op_lon;
+    pkt_system.operator_altitude_geo = op_alt_geo;
+    pkt_system.timestamp = timestamp;
     if (_chan != MAV_CHAN_INVALID) {
         const auto pkt_system_update = mavlink_open_drone_id_system_update_t {
-        operator_latitude : pkt_system.operator_latitude,
-        operator_longitude : pkt_system.operator_longitude,
-        operator_altitude_geo : pkt_system.operator_altitude_geo,
-        timestamp : pkt_system.timestamp,
+        operator_latitude : op_lat,
+        operator_longitude : op_lon,
+        operator_altitude_geo : op_alt_geo,
+        timestamp : timestamp,
         target_system : pkt_system.target_system,
         target_component : pkt_system.target_component,
         };
@@ -772,6 +838,8 @@ void AP_OpenDroneID::handle_msg(mavlink_channel_t chan, const mavlink_message_t 
         break;
     case MAVLINK_MSG_ID_OPEN_DRONE_ID_SYSTEM:
         mavlink_msg_open_drone_id_system_decode(&msg, &pkt_system);
+        // BS-COMMENT[DID-EU-CLASS]: Send EU classification type
+        pkt_system.classification_type = MAV_ODID_CLASSIFICATION_TYPE_EU;
         last_system_ms = AP_HAL::millis();
         break;
     case MAVLINK_MSG_ID_OPEN_DRONE_ID_SYSTEM_UPDATE: {
