@@ -77,7 +77,7 @@ BRD_HEAT_TARG 45       # Target board temperature [°C]
 FRAME_CLASS 4          # OctaQuad configuration
 FRAME_TYPE 1           # X configuration
 AHRS_ORIENTATION 0     # Board orientation (Level orientation)
-ARMING_CHECK 982527    # BitMask for arming check
+ARMING_SKIPCHK 0       # Arm checks to SKIP (was ARMING_CHECK 982527 = all checks on)
 LOG_BITMASK 180223     # Enable differents features to be saved in the log
 LOG_DISARMED 0         # Enable Log Disarmed
 NTF_LED_TYPES 33       # Types of LEDs will be enabled (Built-in LED,DroneCAN)
@@ -91,8 +91,8 @@ ADSB_TYPE 1            # ADSB Type (uAvionix-MAVLink)
 SERIAL5_BAUD 57        # Baudrate
 SERIAL5_OPTIONS 0      # Non Option necesary
 SERIAL5_PROTOCOL 2     # Protocol type: MAVLink2
-SR0_ADSB 2             # Set ADSB stream rate to ground station
-SR1_ADSB 2             # Enables the ground station to receive the detected aircraft information
+MAV1_ADSB 2            # Set ADSB stream rate to ground station
+MAV2_ADSB 2            # Enables the ground station to receive the detected aircraft information
 
 #---EXTRAS
 TERRAIN_ENABLE 0       # Enables the vehicle storing a database of terrain data (Disable)
@@ -107,21 +107,21 @@ CAN_D2_PROTOCOL 1      # Protocol for CAN driver 2 (DroneCAN)
 
 #---FLIGHT MODES
 FLTMODE_CH 0           # RC channel for flight mode switching (0 = disabled, GCS/companion only)
-PILOT_TKOFF_ALT 100    # Default pilot takeoff altitude [cm]
+PILOT_TKO_ALT_M 1      # Default pilot takeoff altitude [m]
 INITIAL_MODE 5         # Initial flight mode at startup (LOITER)
-ANGLE_MAX 3000         # Maximum lean angle in all flight modes [centidegrees]
-LAND_SPEED_HIGH 150    # The descent speed for the first stage of landing [cm/s]
+ATC_ANGLE_MAX 30       # Maximum lean angle in all flight modes [degrees]
+LAND_SPD_HIGH_MS 1.5   # The descent speed for the first stage of landing [m/s]
 GUID_TIMEOUT 10        # Time for guided commands to wait before timing out [s]
 #------RTL
-RTL_ALT 1500           # Target altitude during RTL [cm]
-RTL_SPEED 1000         # Horizontal speed during RTL [cm/s]
+RTL_ALT_M 15           # Target altitude during RTL [m]
+RTL_SPEED_MS 10        # Horizontal speed during RTL [m/s]
 #------LOIT
 LOIT_ANG_MAX 25        # Maximum lean angle (degrees) allowed in Loiter
-LOIT_BRK_ACCEL 250     # Braking acceleration when stopping in Loiter (cm/s²)
+LOIT_BRK_ACC_M 2.5     # Braking acceleration when stopping in Loiter (m/s²)
 LOIT_BRK_DELAY 0.5     # Delay before braking begins when sticks are released (seconds)
-LOIT_BRK_JERK 500      # Maximum rate of change of braking acceleration (cm/s³)
-LOIT_SPEED 1250        # Maximum horizontal speed in Loiter (cm/s)
-LOIT_ACC_MAX 600       # Maximum horizontal acceleration in Loiter (cm/s²)
+LOIT_BRK_JRK_M 5       # Maximum rate of change of braking acceleration (m/s³)
+LOIT_SPEED_MS 12.5     # Maximum horizontal speed in Loiter (m/s)
+LOIT_ACC_MAX_M 6       # Maximum horizontal acceleration in Loiter (m/s²)
 
 #---DID
 DID_ENABLE 1           # Enable Drone ID
@@ -340,16 +340,16 @@ EK3_SRC2_YAW 0          # Secondary yaw source (disabled / none)
 EK3_AFFINITY 6          # EKF core affinity assignment for sensors (barometer & compass)
 WP_NAVALT_MIN 0.5       # Minimum altitude above home for waypoint navigation [meters]
 WP_YAW_BEHAVIOR 1       # Vehicle yaw behavior during waypoint flight and RTL (e.g. face next waypoint)
-WPNAV_SPEED 1000        # Default horizontal waypoint navigation speed [cm/s]
-WPNAV_SPEED_DN 200      # Maximum descent speed during waypoint navigation [cm/s]
-WPNAV_SPEED_UP 350      # Maximum ascent speed during waypoint navigation [cm/s]
-WPNAV_ACCEL 100         # Horizontal acceleration limit during waypoint navigation [cm/s²]
-WPNAV_ACCEL_C 0         # Horizontal acceleration used while cornering between waypoints [cm/s²]
-WPNAV_ACCEL_Z 100       # Vertical acceleration limit during waypoint navigation [cm/s²]
-WPNAV_JERK 1            # Maximum jerk (rate of acceleration change) during navigation [m/s³]
-WPNAV_RADIUS 400        # Acceptance radius for reaching a waypoint [cm]
-WPNAV_RFND_USE 1        # Enable rangefinder-based terrain following during navigation
-WPNAV_TER_MARGIN 10     # Allowed altitude error before stopping during terrain following [meters]
+WP_SPD 10               # Default horizontal waypoint navigation speed [m/s]
+WP_SPD_DN 2             # Maximum descent speed during waypoint navigation [m/s]
+WP_SPD_UP 3.5           # Maximum ascent speed during waypoint navigation [m/s]
+WP_ACC 1                # Horizontal acceleration limit during waypoint navigation [m/s²]
+WP_ACC_CNR 0            # Horizontal acceleration used while cornering between waypoints [m/s²]
+WP_ACC_Z 1              # Vertical acceleration limit during waypoint navigation [m/s²]
+WP_JERK 1               # Maximum jerk (rate of acceleration change) during navigation [m/s³]
+WP_RADIUS_M 4           # Acceptance radius for reaching a waypoint [m]
+WP_RFND_USE 1           # Enable rangefinder-based terrain following during navigation
+WP_TER_MARGIN 10        # Allowed altitude error before stopping during terrain following [meters]
 
 #---FENCE Geofencing system
 FENCE_ENABLE 0          # Enable geofencing system (0 = disabled, 1 = enabled)
@@ -362,9 +362,9 @@ FENCE_TOTAL 0           # Number of polygon fence points defined (0 = no polygon
 FENCE_TYPE 3            # Fence type bitmask (3 = Max altitude + Circular fence enabled)
 
 #---ATC Attitude Control (Angle & Rate Controllers)
-ATC_ACCEL_P_MAX 17200     # Maximum pitch angular acceleration [deg/s²]
-ATC_ACCEL_R_MAX 17200     # Maximum roll angular acceleration [deg/s²]
-ATC_ACCEL_Y_MAX 8000      # Maximum yaw angular acceleration [deg/s²]
+ATC_ACC_P_MAX 172         # Maximum pitch angular acceleration [deg/s²]
+ATC_ACC_R_MAX 172         # Maximum roll angular acceleration [deg/s²]
+ATC_ACC_Y_MAX 80          # Maximum yaw angular acceleration [deg/s²]
 
 ATC_ANG_LIM_TC 0.5        # Time constant for smoothing attitude angle limits [seconds]
 ATC_ANG_PIT_P 4.5         # Pitch angle controller proportional gain
@@ -421,49 +421,49 @@ ATC_RATE_P_MAX 0          # Maximum pitch rate [deg/s] (0 = use default)
 ATC_RATE_R_MAX 0          # Maximum roll rate [deg/s] (0 = use default)
 ATC_RATE_Y_MAX 0          # Maximum yaw rate [deg/s] (0 = use default)
 
-ATC_SLEW_YAW 3000         # Maximum yaw slew rate during heading changes [deg/s²]
+ATC_RATE_WPY_MAX 30       # Maximum yaw slew rate during heading changes [deg/s²]
 ATC_THR_G_BOOST 0         # Throttle boost based on vertical acceleration (disabled)
 ATC_THR_MIX_MAN 0.1       # Manual throttle mixing factor
 ATC_THR_MIX_MAX 0.5       # Maximum throttle mixing value
 ATC_THR_MIX_MIN 0.1       # Minimum throttle mixing value
 
 #---PSC Proportional, Integral, and Derivative Controller (Position / Velocity / Acceleration)
-PSC_ACCZ_D 0              # Vertical acceleration derivative gain
-PSC_ACCZ_D_FF 0           # Vertical acceleration derivative feedforward gain
-PSC_ACCZ_FF 0             # Vertical acceleration feedforward gain
-PSC_ACCZ_FLTD 10          # Vertical acceleration D-term filter cutoff [Hz]
-PSC_ACCZ_FLTE 0           # Vertical acceleration error filter cutoff [Hz]
-PSC_ACCZ_FLTT 10          # Vertical acceleration target filter cutoff [Hz]
-PSC_ACCZ_I 0.4            # Vertical acceleration integral gain
-PSC_ACCZ_IMAX 800         # Maximum vertical acceleration integrator output
-PSC_ACCZ_NEF 0            # Vertical acceleration notch enable frequency (disabled)
-PSC_ACCZ_NTF 0            # Vertical acceleration notch tracking frequency (disabled)
-PSC_ACCZ_P 0.2            # Vertical acceleration proportional gain
-PSC_ACCZ_PDMX 0           # Vertical acceleration PD mix
-PSC_ACCZ_SMAX 0           # Vertical acceleration slew limit
+PSC_D_ACC_D 0             # Vertical acceleration derivative gain
+PSC_D_ACC_D_FF 0          # Vertical acceleration derivative feedforward gain
+PSC_D_ACC_FF 0            # Vertical acceleration feedforward gain
+PSC_D_ACC_FLTD 10         # Vertical acceleration D-term filter cutoff [Hz]
+PSC_D_ACC_FLTE 0          # Vertical acceleration error filter cutoff [Hz]
+PSC_D_ACC_FLTT 10         # Vertical acceleration target filter cutoff [Hz]
+PSC_D_ACC_I 0.04          # Vertical acceleration integral gain
+PSC_D_ACC_IMAX 0.8        # Maximum vertical acceleration integrator output
+PSC_D_ACC_NEF 0           # Vertical acceleration notch enable frequency (disabled)
+PSC_D_ACC_NTF 0           # Vertical acceleration notch tracking frequency (disabled)
+PSC_D_ACC_P 0.02          # Vertical acceleration proportional gain
+PSC_D_ACC_PDMX 0          # Vertical acceleration PD mix
+PSC_D_ACC_SMAX 0          # Vertical acceleration slew limit
 
 PSC_ANGLE_MAX 0           # Maximum tilt angle from position controller (0 = use default)
-PSC_JERK_XY 5             # Maximum horizontal jerk [m/s³]
-PSC_JERK_Z 5              # Maximum vertical jerk [m/s³]
+PSC_JERK_NE 5             # Maximum horizontal jerk [m/s³]
+PSC_JERK_D 5              # Maximum vertical jerk [m/s³]
 
-PSC_POSXY_P 0.1           # Horizontal position proportional gain
-PSC_POSZ_P 1              # Vertical position proportional gain
+PSC_NE_POS_P 0.1          # Horizontal position proportional gain
+PSC_D_POS_P 1             # Vertical position proportional gain
 
-PSC_VELXY_D 0.05          # Horizontal velocity derivative gain
-PSC_VELXY_FF 0            # Horizontal velocity feedforward gain
-PSC_VELXY_FLTD 1.5        # Horizontal velocity D-term filter cutoff [Hz]
-PSC_VELXY_FLTE 1.5        # Horizontal velocity error filter cutoff [Hz]
-PSC_VELXY_I 0.4           # Horizontal velocity integral gain
-PSC_VELXY_IMAX 1000       # Maximum horizontal velocity integrator output
-PSC_VELXY_P 0.75          # Horizontal velocity proportional gain
+PSC_NE_VEL_D 0.05         # Horizontal velocity derivative gain
+PSC_NE_VEL_FF 0           # Horizontal velocity feedforward gain
+PSC_NE_VEL_FLTD 1.5       # Horizontal velocity D-term filter cutoff [Hz]
+PSC_NE_VEL_FLTE 1.5       # Horizontal velocity error filter cutoff [Hz]
+PSC_NE_VEL_I 0.4          # Horizontal velocity integral gain
+PSC_NE_VEL_IMAX 10        # Maximum horizontal velocity integrator output
+PSC_NE_VEL_P 0.75         # Horizontal velocity proportional gain
 
-PSC_VELZ_D 0              # Vertical velocity derivative gain
-PSC_VELZ_FF 0             # Vertical velocity feedforward gain
-PSC_VELZ_FLTD 5           # Vertical velocity D-term filter cutoff [Hz]
-PSC_VELZ_FLTE 5           # Vertical velocity error filter cutoff [Hz]
-PSC_VELZ_I 0              # Vertical velocity integral gain
-PSC_VELZ_IMAX 1000        # Maximum vertical velocity integrator output
-PSC_VELZ_P 5              # Vertical velocity proportional gain
+PSC_D_VEL_D 0             # Vertical velocity derivative gain
+PSC_D_VEL_FF 0            # Vertical velocity feedforward gain
+PSC_D_VEL_FLTD 5          # Vertical velocity D-term filter cutoff [Hz]
+PSC_D_VEL_FLTE 5          # Vertical velocity error filter cutoff [Hz]
+PSC_D_VEL_I 0             # Vertical velocity integral gain
+PSC_D_VEL_IMAX 10         # Maximum vertical velocity integrator output
+PSC_D_VEL_P 5             # Vertical velocity proportional gain
 
 #---NOTCH FILTER High-pass notch filter for the IMU
 # NOTE: Conservative starting values for new powerplant – update after first flight log analysis
