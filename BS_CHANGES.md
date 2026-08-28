@@ -10,6 +10,7 @@
 | [DID-UTC](#did-utc) | DroneID UTC timestamp offset | **ACTIVE** |
 | [DID-TAKEOFF-LOC](#did-takeoff-loc) | DroneID operator location = takeoff location | **ACTIVE** |
 | [DID-RATE](#did-rate) | DroneID MAVLink message rate | **ACTIVE** |
+| [BS-PARAMS](#bs-params) | Airframe identity BS_* params via Lua script | **ACTIVE** |
 
 ---
 
@@ -175,3 +176,71 @@ Sets the MAVLink DroneID message rates:
 const uint32_t _mavlink_dynamic_period_ms = 500;  // 2 Hz — location, system update
 const uint32_t _mavlink_static_period_ms  = 500;  // 2 Hz — basic ID, system, self ID, operator ID
 ```
+
+---
+
+## BS-PARAMS
+
+**Files:** `libraries/AP_HAL_ChibiOS/hwdef/*_C463OP/scripts/BS_Params.lua` (8 identical copies)
+
+Declares the `BS_*` parameter block describing airframe identity, power/payload
+configuration and expected environment: `BS_SERIAL_NUM`, `BS_MODEL`, `BS_FRAME_VER`,
+`BS_POWER_PLANT`, `BS_PAYLOAD_TYPE`, `BS_PAYLOAD_W`, `BS_TAKEOFF_W`, `BS_BATT_SETUP`,
+`BS_ENV_TEMP`, `BS_ENV_WIND`, `BS_ENV_GUST`.
+
+Declarative only — no firmware code reads these back. They exist to identify the
+airframe and record its configuration from the GCS and in dataflash logs.
+
+There is deliberately no `BS_ENABLE` gate. Script parameters cannot use
+ArduPilot's `AP_PARAM_FLAG_ENABLE` mechanism anyway (`param:add_param` takes no
+flags and always creates `AP_PARAM_FLOAT`, while the hide-disabled-group logic in
+`AP_Param.cpp:1811-1817` needs `AP_PARAM_INT8` carrying that flag), and a
+hand-rolled equivalent would only have hidden eleven declarative parameters at
+the cost of a reboot-required step. Adding parameters is the whole job here, so
+the script always registers all eleven.
+
+**Deployment:** copy to the SD card at `APM/scripts/`, same as `Hobbywing_DataLink.lua`
+and `MotorSafeStop.lua`. Requires `SCR_ENABLE 1`, already set in `defaults.parm`.
+
+**Param table key: 120.** Keys only collide between scripts running on the same
+autopilot; ours run `Hobbywing_DataLink` (44), `MotorSafeStop` (61) and this one.
+Upstream applets/drivers/examples claim 7-16, 31, 35-48, 51, 70-90, 101, 104, 106,
+109, 117, 135-139, 170-176 and 193, so 120 is clear there too. A collision is not
+silent — `param:add_table` returns false and the `assert` fails at boot.
+
+Nothing in the firmware assigns meaning to key numbers: `add_table` checks only
+that the key is 0-200, does not clash with a compiled-in parameter key, and
+matches the stored prefix CRC (`AP_Param.cpp:3005-3028`). 120 is the top of the
+101-120 band by internal convention.
+
+### History and caveats
+
+Originally a C++ library, `libraries/BS_Hercules/`, on branch `bs-copter-4.6`
+(commits `a72b896e5d`, `932d14b370`, `4d4c734b43`). That branch is **not** an
+ancestor of `bs-4.6.3` — their merge base is upstream `1ebd4d996e` — so the params
+were absent here until this Lua reimplementation.
+
+Two consequences of moving from C++ to a script:
+
+1. **Storage keys differ.** The C++ version used `k_param_bsHercules` = 260.
+   Dynamic script tables live at `AP_PARAM_DYNAMIC_KEY_BASE` (300) + 120 = 420.
+   Airframes previously flashed from `bs-copter-4.6` will read defaults; their
+   old values sit orphaned in storage and must be re-entered once.
+
+   The table key must not change again after rollout: it *is* the storage
+   address, so moving it orphans every stored value on every aircraft.
+
+2. **All values are floats.** `param:add_param` has no integer variant, so
+   `BS_SERIAL_NUM` (formerly `AP_Int32`) is exact only to 16777215. Serials above
+   that round silently.
+
+Also note the script lives under `hwdef/*/scripts/`, which `param_parse.py` does
+not scan (it only walks `AP_Scripting/applets` and `AP_Scripting/drivers`). The
+`@Param` metadata in the file is therefore documentation only — the GCS shows
+these params without descriptions or value dropdowns. Moving the file to
+`libraries/AP_Scripting/applets/` would enable that metadata, at the cost of
+leaving the per-board layout.
+
+Two metadata errors in the C++ original were corrected here: `BS_TAKEOFF_W` had
+`@Range: 0 -20` (max below min), and `BS_FRAME_VER`'s comment claimed a default
+of 3.0 when its values are 1.0/2.0/2.1.
