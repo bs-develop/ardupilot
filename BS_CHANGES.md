@@ -217,7 +217,7 @@ matches the stored prefix CRC (`AP_Param.cpp:3005-3028`). 120 is the top of the
 
 Originally a C++ library, `libraries/BS_Hercules/`, on branch `bs-copter-4.6`
 (commits `a72b896e5d`, `932d14b370`, `4d4c734b43`). That branch is **not** an
-ancestor of `bs-4.6.3` — their merge base is upstream `1ebd4d996e` — so the params
+ancestor of `bs-4.7.0` — their merge base is upstream `1ebd4d996e` — so the params
 were absent here until this Lua reimplementation.
 
 Two consequences of moving from C++ to a script:

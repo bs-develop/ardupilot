@@ -1,6 +1,6 @@
 **Hardware:** CubePilot CubeOrange+ (STM32H757xx)
 **New Powerplant:** TMotor MN8017 KV120 + TMotor V120A CAN ESC + 32" propellers
-**Firmware:** ArduCopter 4.6.2
+**Firmware:** ArduCopter 4.7.0
 
 ---
 
