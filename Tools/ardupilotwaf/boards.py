@@ -536,6 +536,13 @@ class Board:
             env.CFLAGS += errors
             env.CXXFLAGS += errors
 
+        # bsHelios / Omarchy (GCC 16): don't treat warnings as errors. Newer GCC adds
+        # stricter diagnostics (maybe-uninitialized, format-truncation, ...) that ArduPilot's
+        # hardcoded -Werror=<...> flags turn fatal even with --disable-Werror. A bare -Wno-error
+        # does NOT override a specific -Werror=<foo>, so strip every -Werror* flag outright.
+        env.CFLAGS = [f for f in env.CFLAGS if not f.startswith('-Werror')]
+        env.CXXFLAGS = [f for f in env.CXXFLAGS if not f.startswith('-Werror')]
+
         if cfg.env.DEBUG:
             env.CXXFLAGS += [
                 '-g',
