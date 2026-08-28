@@ -3,7 +3,7 @@
 **Hardware:** CubePilot CubeOrange+ (STM32H757xx)
 **Frame:** Quad X — 4 motors
 **Powerplant:** TMotor MN8017 KV120 + V120A CAN ESC + 32" propellers
-**Firmware base:** ArduCopter 4.6.x
+**Firmware base:** ArduCopter 4.7.x
 **Full hardware docs:** [Cube Module Overview](https://docs.cubepilot.org/user-guides/autopilot/the-cube-module-overview)
 **Pinout reference:** `CubeOrange-pinout.svg`
 

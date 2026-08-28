@@ -1,7 +1,7 @@
 # hw definition file for processing by chibios_hwdef.py
 
 # define a firmware name
-define AP_CUSTOM_FIRMWARE_STRING "H4H31N9_A6UL30M_ACopter463OP"
+define AP_CUSTOM_FIRMWARE_STRING "H4H31N9_A6UL30M_ACopter470OP"
 
 # define droneID
 define AP_OPENDRONEID_ENABLED 1
