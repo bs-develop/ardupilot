@@ -2,7 +2,7 @@
 #----------------------A4H10N9_F0AQ34M_ACopter463OP------------------------------#
 #---------------------------------------------------------------------------------#
 #---IMU TEMPERATURE
-# Copied from H4H32N9_V12MN32N_C463OP (same CubeOrange+ unit).
+# Copied from H4H32N9_V12MN32N_C470OP (same CubeOrange+ unit).
 # If this FC is replaced or a different unit is used, re-run onboard temperature calibration.
 INS_TCAL1_ACC1_X 836.750403
 INS_TCAL1_ACC1_Y 580.968094

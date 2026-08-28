@@ -181,7 +181,7 @@ const uint32_t _mavlink_static_period_ms  = 500;  // 2 Hz — basic ID, system, 
 
 ## BS-PARAMS
 
-**Files:** `libraries/AP_HAL_ChibiOS/hwdef/*_C463OP/scripts/BS_Params.lua` (8 identical copies)
+**Files:** `libraries/AP_HAL_ChibiOS/hwdef/*_C470OP/scripts/BS_Params.lua` (8 identical copies)
 
 Declares the `BS_*` parameter block describing airframe identity, power/payload
 configuration and expected environment: `BS_SERIAL_NUM`, `BS_MODEL`, `BS_FRAME_VER`,

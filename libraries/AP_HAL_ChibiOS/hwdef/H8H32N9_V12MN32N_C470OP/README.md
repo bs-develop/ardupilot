@@ -1,4 +1,4 @@
-# H8H32N9_V12MN32N_C463OP — OctaQuad X8 Custom Firmware Target
+# H8H32N9_V12MN32N_C470OP — OctaQuad X8 Custom Firmware Target
 
 **Hardware:** CubePilot CubeOrange+ (STM32H757xx)
 **Frame:** OctaQuad X — 8 motors

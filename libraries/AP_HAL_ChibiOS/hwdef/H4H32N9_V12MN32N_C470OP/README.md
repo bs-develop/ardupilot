@@ -1,4 +1,4 @@
-# H4H32N9_V12MN32N_C463OP — Quad X4 Custom Firmware Target
+# H4H32N9_V12MN32N_C470OP — Quad X4 Custom Firmware Target
 
 **Hardware:** CubePilot CubeOrange+ (STM32H757xx)
 **Frame:** Quad X — 4 motors
